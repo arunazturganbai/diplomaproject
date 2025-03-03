@@ -1,0 +1,110 @@
+<%- include('partials/header') %>
+
+  <main>
+    <h1>Admin Panel</h1>
+    
+    <section class="admin-section">
+      <h2>Add New Video</h2>
+      <form action="/admin/video/add" method="POST">
+        <input type="text" name="title" placeholder="Title" required>
+        <textarea name="description" placeholder="Description" required></textarea>
+        <input type="url" name="videoUrl" placeholder="Google Cloud Storage Video URL" required>
+        <input type="url" name="thumbnailUrl" placeholder="Google Cloud Storage Image URL" required>
+        <select name="category" required>
+          <% categories.forEach(category => { %>
+            <option value="<%= category._id %>"><%= category.name %></option>
+          <% }); %>
+        </select>
+        <button type="submit">Add Video</button>
+      </form>
+    </section>
+    
+    <section class="admin-section">
+      <h2>Add New Category</h2>
+      <form action="/admin/category/add" method="POST">
+        <input type="text" name="name" placeholder="Category Name" required>
+        <button type="submit">Add Category</button>
+      </form>
+    </section>
+    
+    <section class="admin-section">
+      <h2>Manage Videos</h2>
+      <div class="video-list">
+        <% videos.forEach(video => { %>
+          <div class="video-item">
+            <h3><%= video.title %></h3>
+            <p><%= video.description %></p>
+            <form action="/admin/video/<%= video._id %>/delete" method="POST">
+              <button type="submit">Delete</button>
+            </form>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+    
+    <section class="admin-section">
+      <h2>Forum Moderation</h2>
+      <div class="comments">
+        <% comments.forEach(comment => { %>
+          <div class="comment <% if (comment.user.isAdmin) { %>admin-comment<% } %>">
+            <div class="comment-header">
+              <span class="username"><%= comment.user.username %></span>
+              <span class="time"><%= comment.createdAt.toLocaleString() %></span>
+            </div>
+            <div class="comment-content"><%= comment.content %></div>
+            <form action="/comment/<%= comment._id %>/delete" method="POST" class="delete-form">
+              <button type="submit">Delete</button>
+            </form>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+
+    <section class="admin-section">
+  <h2>Add New Task</h2>
+  <form action="/admin/tasks" method="POST">
+  <label>Question:</label>
+  <input type="text" name="question" required><br>
+
+  <label>Option 1 (Video URL):</label>
+  <input type="text" name="options" required><br>
+
+  <label>Option 2 (Video URL):</label>
+  <input type="text" name="options" required><br>
+
+  <label>Option 3 (Video URL):</label>
+  <input type="text" name="options" required><br>
+
+  <label>Correct Option (0, 1, or 2):</label>
+  <input type="number" name="correctOption" min="0" max="2" required><br>
+
+  <button type="submit">Add Task</button>
+</form>
+
+</section>
+
+<section class="admin-section">
+  <h2>Manage Tasks</h2>
+  <div class="task-list">
+    <% tasks.forEach(task => { %>
+      <div class="task-item">
+        <p><strong><%= task.question %></strong></p>
+        <ol>
+          <% task.options.forEach((opt, i) => { %>
+            <li>
+              <video src="<%= opt.videoUrl %>" width="180" controls></video>
+              <% if (task.correctOption === i) { %> ✅ <% } %>
+            </li>
+          <% }); %>
+        </ol>
+        <form action="/admin/tasks/delete/<%= task._id %>" method="POST">
+          <button type="submit">Delete</button>
+        </form>
+      </div>
+    <% }); %>
+  </div>
+</section>
+
+  </main>
+
+<%- include('partials/footer') %>

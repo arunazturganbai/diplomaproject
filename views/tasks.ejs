@@ -1,0 +1,100 @@
+<%- include('partials/header') %>
+  <style>
+    .question-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px;
+      text-align: center;
+    }
+    .question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .options {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    video {
+      width: 250px;
+      height: auto;
+      cursor: pointer;
+      border: 4px solid transparent;
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+    video:hover {
+      border-color: #a2c1ff;
+    }
+    .result {
+      font-size: 24px;
+      margin-top: 30px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="question-container">
+    <div id="questionBox">
+      <div class="question" id="questionText"></div>
+      <div class="options" id="optionsBox"></div>
+    </div>
+    <div id="resultBox" style="display:none;">
+      <div class="result" id="scoreText"></div>
+      <button onclick="location.reload()">Пройти снова</button>
+    </div>
+  </div>
+
+<script id="tasks-data" type="application/json">
+  <%- JSON.stringify(tasks) %>
+</script>
+<script>
+    let currentIndex = 0;
+    const answers = [];
+
+    function renderQuestion() {
+      const task = tasks[currentIndex];
+      document.getElementById('questionText').innerText = `Вопрос ${currentIndex + 1}: ${task.question}`;
+      const optionsBox = document.getElementById('optionsBox');
+      optionsBox.innerHTML = '';
+
+      task.options.forEach((opt, idx) => {
+        const vid = document.createElement('video');
+        vid.src = opt.videoUrl;
+        vid.controls = true;
+        vid.onclick = () => {
+          answers.push({ taskId: task._id, chosenIndex: idx });
+          currentIndex++;
+          if (currentIndex < tasks.length) {
+            renderQuestion();
+          } else {
+            submitAnswers();
+          }
+        };
+        optionsBox.appendChild(vid);
+      });
+    }
+
+    async function submitAnswers() {
+      const res = await fetch('/tasks/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answers })
+      });
+
+      const data = await res.json();
+      document.getElementById('questionBox').style.display = 'none';
+      document.getElementById('resultBox').style.display = 'block';
+      document.getElementById('scoreText').innerText = `Ваш результат: ${data.score} из ${tasks.length}`;
+    }
+
+    renderQuestion();
+  </script>
+</body>
+</html>
+<%- include('partials/footer') %>

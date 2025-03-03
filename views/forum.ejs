@@ -1,0 +1,89 @@
+<%- include('partials/header') %>
+<%
+  function stringToPastelColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const h = Math.abs(hash) % 360; // цветовой круг
+    return `hsl(${h}, 70%, 85%)`; // нежный цвет: высокая светлота и средняя насыщенность
+  }
+%>
+
+<main>
+<% if (user) { %>
+  <form action="/comment" method="POST" class="comment-form">
+    <textarea name="content" placeholder="Write your comment..." required></textarea>
+    <button type="submit">Post Comment</button>
+  </form>
+<% } else { %>
+  <p class="login-prompt">Please <a href="/login">login</a> to post comments.</p>
+<% } %>
+
+<%
+  const repliesByParent = {};
+  comments.forEach(c => {
+    const parentId = c.parent ? c.parent.toString() : null;
+    if (!repliesByParent[parentId]) repliesByParent[parentId] = [];
+    repliesByParent[parentId].push(c);
+  });
+
+  function renderComments(parentId) {
+    const group = repliesByParent[parentId] || [];
+    group.forEach(comment => {
+%>
+  <div class="comment">
+    <div class="comment-header">
+        <div class="avatar" style='background-color: <%= stringToPastelColor(comment.user.username) %>'>
+
+            <%= comment.user.username.charAt(0).toUpperCase() %>
+        </div>
+
+  <div class="header-main">
+    <span class="username"><%= comment.user.username %></span>
+  </div>
+  <span class="time"><%= comment.createdAt.toLocaleString() %></span>
+</div>
+
+    <div class="comment-content"><%= comment.content %></div>
+
+    <div class="comment-actions">
+      <% if (user) { %>
+        <button type="button" onclick="toggleReplyForm('<%= comment._id %>')">
+          🗨️ Reply
+        </button>
+      <% } %>
+      <% if (user && (user._id.toString() === comment.user._id.toString() || user.isAdmin)) { %>
+        <form action="/comment/<%= comment._id %>/delete" method="POST">
+          <button type="submit">🗑️ Delete</button>
+        </form>
+      <% } %>
+    </div>
+
+    <% if (user) { %>
+      <form action="/comment" method="POST" class="reply-form" id="reply-form-<%= comment._id %>" style="display:none;">
+        <input type="hidden" name="parentId" value="<%= comment._id %>">
+        <textarea name="content" placeholder="Write your reply..." required></textarea>
+        <button type="submit">Post Reply</button>
+      </form>
+    <% } %>
+
+    <div class="replies">
+      <% renderComments(comment._id.toString()); %>
+    </div>
+  </div>
+<%
+    });
+  }
+
+  renderComments(null);
+%>
+<script>
+  function toggleReplyForm(commentId) {
+    const form = document.getElementById('reply-form-' + commentId);
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
+
+
+<%- include('partials/footer') %>

@@ -1,0 +1,11 @@
+<h2>Результаты поиска для "<%= query %>"</h2>
+
+<% if (words.length === 0) { %>
+  <p>Ничего не найдено.</p>
+<% } else { %>
+  <ul>
+    <% words.forEach(word => { %>
+      <li><%= word.title %></li>
+    <% }); %>
+  </ul>
+<% } %>
