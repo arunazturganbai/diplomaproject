@@ -1,14 +1,14 @@
 <%- include('partials/header') %>
 
   <main>
-    <h1>Categories</h1>
+    <h1>Категориялар</h1>
     
     <div class="categories-grid">
       <% categories.forEach(category => { %>
   <a href="/category/<%= category._id %>" class="category-card">
     <h2><%= category.name %></h2>
     <div class="video-count">
-      <%= category.videos.length %> videos
+      <%= category.videos.length %> Видео
     </div>
   </a>
 <% }); %>
