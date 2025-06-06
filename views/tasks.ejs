@@ -1,100 +1,654 @@
 <%- include('partials/header') %>
   <style>
-    .question-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 30px;
+    :root {
+      --primary-color: #002137;
+      --secondary-color: #ffda00;
+      --accent-color: #007bff;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --light-bg: #f8f9fa;
+      --dark-text: #212529;
+      --light-text: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+
+    
+    .main-content {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .quiz-header {
       text-align: center;
+      margin-bottom: 2.5rem;
     }
-    .question {
-      font-size: 24px;
-      margin-bottom: 20px;
+    
+    .quiz-header h2 {
+      color: var(--primary-color);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
     }
-    .options {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      gap: 20px;
+    
+    .quiz-header p {
+      color: #6c757d;
+      font-size: 1.1rem;
     }
-    video {
-      width: 250px;
-      height: auto;
-      cursor: pointer;
-      border: 4px solid transparent;
+    
+    .progress-container {
+      width: 100%;
+      background-color: #e9ecef;
       border-radius: 10px;
-      transition: border-color 0.2s;
+      margin-bottom: 2rem;
+      height: 12px;
+      overflow: hidden;
     }
-    video:hover {
-      border-color: #a2c1ff;
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary-color), #ffea4d);
+      width: 0%;
+      transition: width 0.4s ease;
     }
-    .result {
-      font-size: 24px;
-      margin-top: 30px;
+    
+    .question-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
     }
-    button {
-      padding: 10px 20px;
-      margin-top: 20px;
-      font-size: 16px;
+    
+    .question-card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+    
+    .question-card:hover {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .question-card h3 {
+      color: var(--primary-color);
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .video-option {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .video-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 3px solid transparent;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+    
+    .video-option:hover::before {
+      border-color: rgba(0, 33, 55, 0.3);
+    }
+    
+    .video-option input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .video-option.selected::before {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+    }
+    
+    .video-option.correct::before {
+      border-color: var(--correct-color);
+      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+    }
+    
+    .video-option.incorrect::before {
+      border-color: var(--incorrect-color);
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+    }
+    
+    video {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+    
+    .video-option:hover video {
+      transform: scale(1.02);
+    }
+    
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .button {
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .button-primary {
+      background-color: var(--accent-color);
+      color: white;
+      background-color: #002137;
+    }
+    
+    .button-primary:hover {
+      background-color: #0069d9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .button-secondary {
+      background-color: var(--secondary-color);
+      color: var(--primary-color);
+    }
+    
+    .button-secondary:hover {
+      background-color: #ffd700;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    
+    .results-container {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 2rem;
+      background-color: var(--light-bg);
+      border-radius: 12px;
+      display: none;
+    }
+    
+    .results-container h3 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    
+    .score-display {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 1rem 0;
+    }
+    
+    .feedback {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: #6c757d;
+    }
+    
+    .icon {
+      margin-right: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 1.5rem;
+        margin: 1rem;
+      }
+      
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .controls {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .button {
+        width: 100%;
+      }
+    }
+    
+    /* Animation for correct answer */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+    
+    .video-option.correct {
+      animation: pulse 0.5s ease;
+    }
+    
+    /* Tooltip for videos */
+    .video-tooltip {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background-color: rgba(0, 33, 55, 0.8);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .video-option:hover .video-tooltip {
+      opacity: 1;
+    }
+    
+    /* Floating action button */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background-color: var(--secondary-color);
+      color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    
+    .fab:hover {
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     }
   </style>
-</head>
+  
 <body>
-  <div class="question-container">
-    <div id="questionBox">
-      <div class="question" id="questionText"></div>
-      <div class="options" id="optionsBox"></div>
-    </div>
-    <div id="resultBox" style="display:none;">
-      <div class="result" id="scoreText"></div>
-      <button onclick="location.reload()">Қайта өту</button>
-    </div>
+<div class="main-content">
+  <div class="quiz-header">
+    <h2>Викторина по жестовому языку</h2>
+    <p>Выберите правильный жест для каждого слова или фразы</p>
   </div>
+  
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  
+  <form id="quizForm">
+    <div class="question-container">
+      <div class="question-card" data-correct="0" data-question="1">
+        <h3>1. Какой жест обозначает «Африка»?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question1" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/africa.mp4" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question1" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/argentina.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question1" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/austria.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="question-card" data-correct="1" data-question="2">
+        <h3>2. Какой жест обозначает «Америка»?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question2" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/africa.mp4" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question2" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/argentina.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question2" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/austria.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="question-card" data-correct="2" data-question="3">
+        <h3>3. Какой жест обозначает «Сингапур»?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question3" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/africa.mp4" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question3" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/argentina.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question3" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/austria.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Нажмите для выбора</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button type="button" class="button button-secondary" id="prevBtn" disabled>
+        <span class="icon">←</span> Назад
+      </button>
+      
+      <div>
+        <span id="currentQuestion">1</span> из <span id="totalQuestions">3</span>
+      </div>
+      
+      <button type="button" class="button button-primary" id="nextBtn">
+        Далее <span class="icon">→</span>
+      </button>
+      
+      <button type="submit" class="button button-primary" id="submitBtn" style="display: none;">
+        Завершить тест
+      </button>
+    </div>
+  </form>
+  
+  <div class="results-container" id="resultsContainer">
+    <h3>Результаты теста</h3>
+    <div class="score-display">
+      <span id="score">0</span>/<span id="total">3</span>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button type="button" class="button button-secondary" id="restartBtn" style="margin-top: 1.5rem;">
+      Пройти тест снова
+    </button>
+  </div>
+</div>
 
-<script id="tasks-data" type="application/json">
-  <%- JSON.stringify(tasks) %>
-</script>
+<div class="fab" id="helpFab" title="Помощь">
+  ?
+</div>
+
 <script>
-    let currentIndex = 0;
-    const answers = [];
-
-    function renderQuestion() {
-      const task = tasks[currentIndex];
-      document.getElementById('questionText').innerText = `Вопрос ${currentIndex + 1}: ${task.question}`;
-      const optionsBox = document.getElementById('optionsBox');
-      optionsBox.innerHTML = '';
-
-      task.options.forEach((opt, idx) => {
-        const vid = document.createElement('video');
-        vid.src = opt.videoUrl;
-        vid.controls = true;
-        vid.onclick = () => {
-          answers.push({ taskId: task._id, chosenIndex: idx });
-          currentIndex++;
-          if (currentIndex < tasks.length) {
-            renderQuestion();
-          } else {
-            submitAnswers();
+  document.addEventListener('DOMContentLoaded', function() {
+    // DOM elements
+    const quizForm = document.getElementById('quizForm');
+    const questionCards = document.querySelectorAll('.question-card');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const progressBar = document.getElementById('progressBar');
+    const currentQuestionDisplay = document.getElementById('currentQuestion');
+    const totalQuestionsDisplay = document.getElementById('totalQuestions');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const scoreDisplay = document.getElementById('score');
+    const totalDisplay = document.getElementById('total');
+    const feedbackDisplay = document.getElementById('feedback');
+    const helpFab = document.getElementById('helpFab');
+    
+    // Quiz state
+    let currentQuestionIndex = 0;
+    const totalQuestions = questionCards.length;
+    let answers = new Array(totalQuestions).fill(null);
+    
+    // Initialize
+    totalQuestionsDisplay.textContent = totalQuestions;
+    totalDisplay.textContent = totalQuestions;
+    updateProgress();
+    showQuestion(currentQuestionIndex);
+    
+    // Navigation
+    nextBtn.addEventListener('click', function() {
+      if (validateCurrentQuestion()) {
+        currentQuestionIndex++;
+        showQuestion(currentQuestionIndex);
+        updateProgress();
+      }
+    });
+    
+    prevBtn.addEventListener('click', function() {
+      currentQuestionIndex--;
+      showQuestion(currentQuestionIndex);
+      updateProgress();
+    });
+    
+    restartBtn.addEventListener('click', function() {
+      resetQuiz();
+    });
+    
+    // Video option selection - FIXED CLICK HANDLING
+    document.querySelectorAll('.video-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const input = this.querySelector('input');
+        if (!input) return;
+        
+        // Unselect all options in this question
+        const questionCard = this.closest('.question-card');
+        questionCard.querySelectorAll('.video-option').forEach(opt => {
+          opt.classList.remove('selected');
+        });
+        
+        // Select current option
+        this.classList.add('selected');
+        input.checked = true;
+        
+        // Update answer in state
+        const questionIndex = parseInt(questionCard.dataset.question) - 1;
+        answers[questionIndex] = parseInt(input.value);
+        
+        updateNavigation();
+      });
+    });
+    
+    // Form submission
+    quizForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      showResults();
+    });
+    
+    // Help button
+    helpFab.addEventListener('click', function() {
+      alert('Выберите правильный жест для каждого вопроса. Можно нажимать на видео для выбора. Используйте кнопки "Назад" и "Далее" для навигации.');
+    });
+    
+    // Functions
+    function showQuestion(index) {
+      questionCards.forEach((card, i) => {
+        card.style.display = i === index ? 'block' : 'none';
+      });
+      
+      currentQuestionDisplay.textContent = index + 1;
+      
+      // Update navigation buttons
+      prevBtn.disabled = index === 0;
+      nextBtn.style.display = index === totalQuestions - 1 ? 'none' : 'inline-flex';
+      submitBtn.style.display = index === totalQuestions - 1 ? 'inline-flex' : 'none';
+      
+      // Restore selected answer if exists
+      if (answers[index] !== null) {
+        const selectedInput = questionCards[index].querySelector(`input[value="${answers[index]}"]`);
+        if (selectedInput) {
+          selectedInput.checked = true;
+          selectedInput.parentElement.classList.add('selected');
+        }
+      }
+      
+      updateNavigation();
+    }
+    
+    function validateCurrentQuestion() {
+      if (answers[currentQuestionIndex] === null) {
+        alert('Пожалуйста, выберите вариант ответа перед продолжением.');
+        return false;
+      }
+      return true;
+    }
+    
+    function updateNavigation() {
+      nextBtn.disabled = answers[currentQuestionIndex] === null;
+    }
+    
+    function updateProgress() {
+      const answeredCount = answers.filter(a => a !== null).length;
+      const progress = (answeredCount / totalQuestions) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+    
+    function showResults() {
+      let correctCount = 0;
+      
+      questionCards.forEach((card, index) => {
+        const correctAnswer = parseInt(card.dataset.correct);
+        const selectedAnswer = answers[index];
+        
+        // Mark correct and incorrect answers
+        const options = card.querySelectorAll('.video-option');
+        options.forEach((option, i) => {
+          if (i === correctAnswer) {
+            option.classList.add('correct');
+          } else if (selectedAnswer === i && selectedAnswer !== correctAnswer) {
+            option.classList.add('incorrect');
           }
-        };
-        optionsBox.appendChild(vid);
+        });
+        
+        if (selectedAnswer === correctAnswer) {
+          correctCount++;
+        }
       });
+      
+      // Calculate score
+      const score = Math.round((correctCount / totalQuestions) * 100);
+      scoreDisplay.textContent = correctCount;
+      
+      // Show feedback
+      let feedback = '';
+      if (score === 100) {
+        feedback = 'Отличный результат! Вы прекрасно знаете жестовый язык!';
+      } else if (score >= 70) {
+        feedback = 'Хороший результат! Есть еще что изучить, но вы на правильном пути!';
+      } else if (score >= 40) {
+        feedback = 'Неплохо! Рекомендуем потренироваться еще.';
+      } else {
+        feedback = 'Попробуйте изучить жесты еще раз и пройти тест заново.';
+      }
+      
+      feedbackDisplay.textContent = feedback;
+      
+      // Show results
+      resultsContainer.style.display = 'block';
+      quizForm.style.display = 'none';
+      
+      // Scroll to results
+      resultsContainer.scrollIntoView({ behavior: 'smooth' });
     }
-
-    async function submitAnswers() {
-      const res = await fetch('/tasks/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers })
+    
+    function resetQuiz() {
+      // Reset state
+      currentQuestionIndex = 0;
+      answers = new Array(totalQuestions).fill(null);
+      
+      // Reset UI
+      questionCards.forEach(card => {
+        const options = card.querySelectorAll('.video-option');
+        options.forEach(option => {
+          option.classList.remove('selected', 'correct', 'incorrect');
+          const input = option.querySelector('input');
+          if (input) input.checked = false;
+        });
       });
-
-      const data = await res.json();
-      document.getElementById('questionBox').style.display = 'none';
-      document.getElementById('resultBox').style.display = 'block';
-      document.getElementById('scoreText').innerText = `Сіздің нәтижеңіз: ${data.score} / ${tasks.length}`;
+      
+      resultsContainer.style.display = 'none';
+      quizForm.style.display = 'block';
+      showQuestion(currentQuestionIndex);
+      updateProgress();
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
-    renderQuestion();
-  </script>
+    
+    // Play videos on hover
+    document.querySelectorAll('.video-option').forEach(option => {
+      const video = option.querySelector('video');
+      
+      option.addEventListener('mouseenter', () => {
+        if (video) video.play();
+      });
+      
+      option.addEventListener('mouseleave', () => {
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
+
 <%- include('partials/footer') %>

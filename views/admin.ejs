@@ -1,10 +1,10 @@
 <%- include('partials/header') %>
 
   <main>
-    <h1>Admin Panel</h1>
+    <h1>Админ панелі</h1>
     
     <section class="admin-section">
-      <h2>Add New Video</h2>
+      <h2>Жаңа видео жүктеу</h2>
       <form action="/admin/video/add" method="POST">
         <input type="text" name="title" placeholder="Тақырыбы" required>
         <textarea name="description" placeholder="Сипаттамасы" required></textarea>
@@ -15,17 +15,31 @@
             <option value="<%= category._id %>"><%= category.name %></option>
           <% }); %>
         </select>
-        <button type="submit">Add Video</button>
+        <button type="submit">Видеоны жүктеу</button>
       </form>
     </section>
     
     <section class="admin-section">
-      <h2>Add New Category</h2>
+      <h2>Жаңа категория қосу </h2>
       <form action="/admin/category/add" method="POST">
-        <input type="text" name="name" placeholder="Category Name" required>
-        <button type="submit">Add Category</button>
+        <input type="text" name="name" placeholder="Категория тақырыбы" required>
+        <button type="submit">Категория қосу</button>
       </form>
     </section>
+    
+    <section class="admin-section">
+  <h2>Категорияларды басқару</h2>
+  <div class="category-list">
+    <% categories.forEach(category => { %>
+      <div class="category-item" data-id="<%= category._id %>" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <span><%= category.name %></span>
+        <button class="delete-category-btn" style="background:#c0392b;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">
+          Жою
+        </button>
+      </div>
+    <% }); %>
+  </div>
+</section>
 
     
     <section class="admin-section">
@@ -61,50 +75,35 @@
       </div>
     </section>
 
-    <section class="admin-section">
-  <h2>Жаңа жаттығу қосу</h2>
-  <form action="/admin/tasks" method="POST">
-  <label>Тапсырма:</label>
-  <input type="text" name="question" required><br>
+    
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.delete-category-btn').forEach(button => {
+      button.addEventListener('click', async (event) => {
+        const categoryItem = event.target.closest('.category-item');
+        const categoryId = categoryItem.getAttribute('data-id');
 
-  <label>1-ңұсқа (видео сілтемесі):</label>
-  <input type="text" name="options" required><br>
+        const confirmDelete = confirm('Категорияны жоюға сенімдісіз бе?');
+        if (!confirmDelete) return;
 
-  <label>2-ңұсқа (видео сілтемесі):</label>
-  <input type="text" name="options" required><br>
+        try {
+          const res = await fetch(`/admin/categories/${categoryId}`, {
+            method: 'DELETE'
+          });
 
-  <label>3-ңұсқа (видео сілтемесі):</label>
-  <input type="text" name="options" required><br>
-
-  <label>Дұрыс жауап (0, 1, немесе 2):</label>
-  <input type="number" name="correctOption" min="0" max="2" required><br>
-
-  <button type="submit">Жаттығуды қосу</button>
-</form>
-
-</section>
-
-<section class="admin-section">
-  <h2>Жаттығу параметрлерің өзгерту</h2>
-  <div class="task-list">
-    <% tasks.forEach(task => { %>
-      <div class="task-item">
-        <p><strong><%= task.question %></strong></p>
-        <ol>
-          <% task.options.forEach((opt, i) => { %>
-            <li>
-              <video src="<%= opt.videoUrl %>" width="180" controls></video>
-              <% if (task.correctOption === i) { %> ✅ <% } %>
-            </li>
-          <% }); %>
-        </ol>
-        <form action="/admin/tasks/delete/<%= task._id %>" method="POST">
-          <button type="submit">Жою</button>
-        </form>
-      </div>
-    <% }); %>
-  </div>
-</section>
+          if (res.ok) {
+            categoryItem.remove(); // удаляем элемент из DOM
+          } else {
+            const error = await res.json();
+            alert('Қате: ' + error.message);
+          }
+        } catch (error) {
+          alert('Жою кезінде қате пайда болды');
+        }
+      });
+    });
+  });
+</script>
 
   </main>
 

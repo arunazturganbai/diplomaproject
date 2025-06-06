@@ -5,6 +5,8 @@ const User = require('../models/User');
 const router = express.Router();
 const { ensureAdmin } = require('../middleware/auth');
 const Task = require('../models/Task');
+const adminRouter = require('./routes/admin');
+app.use('/admin', adminRouter);
 
 // Admin authentication middleware
 const requireAdmin = (req, res, next) => {
@@ -252,20 +254,10 @@ router.put('/categories/:id', async (req, res) => {
 // DELETE /admin/categories/:id
 router.delete('/categories/:id', async (req, res) => {
   try {
-    // Check if category has words
-    const wordsCount = await Word.countDocuments({ category: req.params.id });
-    if (wordsCount > 0) {
-      req.flash('error', 'Нельзя удалить категорию, содержащую слова');
-      return res.redirect('/admin/categories');
-    }
-    
     await Category.findByIdAndDelete(req.params.id);
-    req.flash('success', 'Категория успешно удалена');
-    res.redirect('/admin/categories');
-  } catch (error) {
-    console.error('Delete category error:', error);
-    req.flash('error', 'Ошибка удаления категории');
-    res.redirect('/admin/categories');
+    res.redirect('/admin');
+  } catch (err) {
+    res.status(500).send('Категорияны жою мүмкін болмады.');
   }
 });
 

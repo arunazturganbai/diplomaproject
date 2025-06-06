@@ -20,11 +20,9 @@ const User = require('./models/User');
 const Video = require('./models/Video');
 const Category = require('./models/Category');
 const Comment = require('./models/Comment');
-const taskRoutes = require('./routes/tasks');
 const wordRoutes = require('./routes/words');
 const upload = multer({ dest: 'uploads/' });
 app.use('/words', wordRoutes);
-app.use('/tasks', taskRoutes);
 app.use('/uploads', express.static('uploads'));
 
 // Middleware
@@ -68,6 +66,8 @@ const isAdmin = (req, res, next) => {
 // Маршруты
 app.get('/map', (req, res) => res.render('map')); 
 
+app.get('/tasks', (req, res) => res.render('tasks')); 
+
 app.get('/', async (req, res) => {
   const videos = await Video.find().populate('category');
   res.render('index', { user: req.session.user, videos });
@@ -98,9 +98,8 @@ app.get('/admin', isAdmin, async (req, res) => {
     const videos = await Video.find().populate('category');
     const categories = await Category.find();
     const comments = await Comment.find().populate('user');
-    const tasks = await Task.find();  
 
-    res.render('admin', { user: req.session.user, videos, categories, comments, tasks }); 
+    res.render('admin', { user: req.session.user, videos, categories, comments }); 
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
@@ -254,28 +253,7 @@ app.post('/admin/category/add', isAdmin, upload.single('image'), async (req, res
 });
 
 
-app.post('/admin/tasks', isAdmin, async (req, res) => {
-  try {
-    const { question, options, correctOption } = req.body;
 
-    // Валидация
-    if (!question || !options || options.length < 2 || correctOption === undefined) {
-      return res.status(400).send('Invalid task data');
-    }
-
-    const newTask = new Task({
-      question,
-      options: options.map(videoUrl => ({ videoUrl })),
-      correctOption: parseInt(correctOption)
-    });
-
-    await newTask.save();
-    res.redirect('/admin');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Server error while creating task');
-  }
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
