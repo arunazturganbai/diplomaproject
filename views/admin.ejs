@@ -1,43 +1,42 @@
 <%- include('partials/header') %>
 
   <main>
-    <h1>Админ Панелі</h1>
+    <h1>Admin Panel</h1>
     
     <section class="admin-section">
-      <h2>Жаңа видео қосу</h2>
+      <h2>Add New Video</h2>
       <form action="/admin/video/add" method="POST">
-        <input type="text" name="title" placeholder="Title" required>
-        <textarea name="description" placeholder="Description" required></textarea>
-        <input type="url" name="videoUrl" placeholder="Google Cloud Storage Video URL" required>
-        <input type="url" name="thumbnailUrl" placeholder="Google Cloud Storage Image URL" required>
+        <input type="text" name="title" placeholder="Тақырыбы" required>
+        <textarea name="description" placeholder="Сипаттамасы" required></textarea>
+        <input type="url" name="videoUrl" placeholder="Google Cloud Storage-ден видео сілтемесі" required>
+        <input type="url" name="thumbnailUrl" placeholder="Google Cloud Storage-ден фото сілтемесі" required>
         <select name="category" required>
           <% categories.forEach(category => { %>
             <option value="<%= category._id %>"><%= category.name %></option>
           <% }); %>
         </select>
-        <button type="submit">Видео жүктеу</button>
+        <button type="submit">Add Video</button>
       </form>
     </section>
     
     <section class="admin-section">
-      <h2>Жаңа категория қосу</h2>
-      <form action="/admin/category/add" method="POST" enctype="multipart/form-data">
+      <h2>Add New Category</h2>
+      <form action="/admin/category/add" method="POST">
         <input type="text" name="name" placeholder="Category Name" required>
-        <input type="file" name="image" accept="image/*" required>
-        <button type="submit">Категория қосу</button>
+        <button type="submit">Add Category</button>
       </form>
     </section>
 
     
     <section class="admin-section">
-      <h2>Manage Videos</h2>
+      <h2>Видео параметрлерің өзгерту</h2>
       <div class="video-list">
         <% videos.forEach(video => { %>
           <div class="video-item">
             <h3><%= video.title %></h3>
             <p><%= video.description %></p>
             <form action="/admin/video/<%= video._id %>/delete" method="POST">
-              <button type="submit">Delete</button>
+              <button type="submit">Жою</button>
             </form>
           </div>
         <% }); %>
@@ -45,7 +44,7 @@
     </section>
     
     <section class="admin-section">
-      <h2>Forum Moderation</h2>
+      <h2>Форум модерациясы</h2>
       <div class="comments">
         <% comments.forEach(comment => { %>
           <div class="comment <% if (comment.user.isAdmin) { %>admin-comment<% } %>">
@@ -55,7 +54,7 @@
             </div>
             <div class="comment-content"><%= comment.content %></div>
             <form action="/comment/<%= comment._id %>/delete" method="POST" class="delete-form">
-              <button type="submit">Delete</button>
+              <button type="submit">Жою</button>
             </form>
           </div>
         <% }); %>
@@ -63,30 +62,30 @@
     </section>
 
     <section class="admin-section">
-  <h2>Add New Task</h2>
+  <h2>Жаңа жаттығу қосу</h2>
   <form action="/admin/tasks" method="POST">
-  <label>Question:</label>
+  <label>Тапсырма:</label>
   <input type="text" name="question" required><br>
 
-  <label>Option 1 (Video URL):</label>
+  <label>1-ңұсқа (видео сілтемесі):</label>
   <input type="text" name="options" required><br>
 
-  <label>Option 2 (Video URL):</label>
+  <label>2-ңұсқа (видео сілтемесі):</label>
   <input type="text" name="options" required><br>
 
-  <label>Option 3 (Video URL):</label>
+  <label>3-ңұсқа (видео сілтемесі):</label>
   <input type="text" name="options" required><br>
 
-  <label>Correct Option (0, 1, or 2):</label>
+  <label>Дұрыс жауап (0, 1, немесе 2):</label>
   <input type="number" name="correctOption" min="0" max="2" required><br>
 
-  <button type="submit">Add Task</button>
+  <button type="submit">Жаттығуды қосу</button>
 </form>
 
 </section>
 
 <section class="admin-section">
-  <h2>Manage Tasks</h2>
+  <h2>Жаттығу параметрлерің өзгерту</h2>
   <div class="task-list">
     <% tasks.forEach(task => { %>
       <div class="task-item">
@@ -100,7 +99,7 @@
           <% }); %>
         </ol>
         <form action="/admin/tasks/delete/<%= task._id %>" method="POST">
-          <button type="submit">Delete</button>
+          <button type="submit">Жою</button>
         </form>
       </div>
     <% }); %>

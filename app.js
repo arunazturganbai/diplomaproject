@@ -38,7 +38,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
-// Добавьте перед маршрутами
+
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.error = null;
@@ -116,7 +116,7 @@ app.get('/login', (req, res) => {
   }
   res.render('login', { 
     user: req.session.user || null,
-    error: null // Явно передаем error, даже если null
+    error: null 
   });
 });
 

@@ -5,19 +5,19 @@
     for (let i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
-    const h = Math.abs(hash) % 360; // цветовой круг
-    return `hsl(${h}, 70%, 85%)`; // нежный цвет: высокая светлота и средняя насыщенность
+    const h = Math.abs(hash) % 360; 
+    return `hsl(${h}, 70%, 85%)`; 
   }
 %>
 
 <main>
 <% if (user) { %>
   <form action="/comment" method="POST" class="comment-form">
-    <textarea name="content" placeholder="Write your comment..." required></textarea>
-    <button type="submit">Post Comment</button>
+    <textarea name="content" placeholder="Пікіріңізді жазыңыз..." required></textarea>
+    <button type="submit">Пікірді жүктеу</button>
   </form>
 <% } else { %>
-  <p class="login-prompt">Please <a href="/login">login</a> to post comments.</p>
+  <p class="login-prompt">Пікір қалдыру үшін <a href="/login">аккаунтқа кіру</a> қажет.</p>
 <% } %>
 
 <%
@@ -50,12 +50,12 @@
     <div class="comment-actions">
       <% if (user) { %>
         <button type="button" onclick="toggleReplyForm('<%= comment._id %>')">
-          🗨️ Reply
+          🗨️ Жауап беру
         </button>
       <% } %>
       <% if (user && (user._id.toString() === comment.user._id.toString() || user.isAdmin)) { %>
         <form action="/comment/<%= comment._id %>/delete" method="POST">
-          <button type="submit">🗑️ Delete</button>
+          <button type="submit">🗑️ Жою</button>
         </form>
       <% } %>
     </div>
@@ -63,8 +63,8 @@
     <% if (user) { %>
       <form action="/comment" method="POST" class="reply-form" id="reply-form-<%= comment._id %>" style="display:none;">
         <input type="hidden" name="parentId" value="<%= comment._id %>">
-        <textarea name="content" placeholder="Write your reply..." required></textarea>
-        <button type="submit">Post Reply</button>
+        <textarea name="content" placeholder="Жауабыңызды жазыңыз..." required></textarea>
+        <button type="submit">Жауапты жүктеу</button>
       </form>
     <% } %>
 

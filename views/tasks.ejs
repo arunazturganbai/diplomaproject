@@ -46,7 +46,7 @@
     </div>
     <div id="resultBox" style="display:none;">
       <div class="result" id="scoreText"></div>
-      <button onclick="location.reload()">Пройти снова</button>
+      <button onclick="location.reload()">Қайта өту</button>
     </div>
   </div>
 
@@ -90,7 +90,7 @@
       const data = await res.json();
       document.getElementById('questionBox').style.display = 'none';
       document.getElementById('resultBox').style.display = 'block';
-      document.getElementById('scoreText').innerText = `Ваш результат: ${data.score} из ${tasks.length}`;
+      document.getElementById('scoreText').innerText = `Сіздің нәтижеңіз: ${data.score} / ${tasks.length}`;
     }
 
     renderQuestion();

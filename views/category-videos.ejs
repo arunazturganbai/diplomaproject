@@ -2,7 +2,7 @@
 
   <main>
     <h1><%= category.name %></h1>
-    <a href="/categories" class="back-link">← Back to Categories</a>
+    <a href="/categories" class="back-link">← Категориялар бөліміне қайту</a>
     
     <div class="videos-grid">
   <% if (videos.length > 0) { %>
@@ -16,7 +16,7 @@
 
     <% }); %>
   <% } else { %>
-    <p>No videos in this category yet.</p>
+    <p>Бұл категорияға видеолар әлі жүктелмеді</p>
   <% } %>
 </div>
 <!-- Модальное окно -->
@@ -24,7 +24,7 @@
   <div class="modal-content">
     <span class="close-modal" onclick="closeVideoModal()">&times;</span>
     <video id="modalVideo" controls>
-      Your browser does not support the video tag.
+     Сіздің браузеріңіз видео тэгін қолдамайды.
     </video>
     <h2 id="modalVideoTitle"></h2>
   </div>

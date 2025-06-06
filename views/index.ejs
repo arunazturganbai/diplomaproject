@@ -1,7 +1,6 @@
 <%- include('partials/header') %>
 
 <style>
-  /* Основные стили (сокращённые для читаемости, при необходимости можно развернуть) */
   .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -120,17 +119,17 @@
 
 <main>
   <section class="hero">
-    <h1>Welcome to Sign Language Dictionary</h1>
-    <p>Learn sign language with our video dictionary. Search for words, browse categories, and join our community forum.</p>
+    <h1>Kazakh Sign Language сөздігіне қош келдіңіз!</h1>
+    <p>Бейне сөздігімізбен ым тілін үйреніңіз. Сөздерді іздеңіз, категорияларды шолыңыз және форумға қосылыңыз.</p>
 
     <div class="search">
-      <input type="text" id="searchInput" placeholder="Введите слово..." />
+      <input type="text" id="searchInput" placeholder="Сөзді теріңіз..." />
     </div>
     <div id="resultsContainer" class="video-grid"></div>
   </section>
 
   <section class="featured-videos">
-    <h2>Recently Added Signs</h2>
+    <h2>Жақында қосылған ымдар</h2>
     <div class="video-grid">
       <% videos.forEach(video => { %>
         <div class="video-card" onclick="openVideoModal('<%= video.videoUrl %>', '<%= video.title %>', '<%= video.description %>')">
@@ -146,24 +145,24 @@
     </div>
   </section>
 
-  <!-- Модальное окно -->
+
   <div id="videoModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeVideoModal()">&times;</span>
       <div class="video-container">
         <video id="modalVideo" controls>
           <source id="videoSource" src="" type="video/mp4">
-          Your browser does not support the video tag.
+         Сіздің браузеріңіз видео тэгің қолдамайды.
         </video>
       </div>
       <div class="video-info">
         <h2 id="videoTitle"></h2>
         <p id="videoDescription"></p>
         <div class="video-controls">
-          <button onclick="togglePlay()">Play/Pause</button>
-          <button onclick="slowSpeed()">Slow (0.5x)</button>
-          <button onclick="normalSpeed()">Normal (1x)</button>
-          <button onclick="fastSpeed()">Fast (1.5x)</button>
+          <button onclick="togglePlay()">Ойнату/Тоқтату</button>
+          <button onclick="slowSpeed()">Баяулату (0.5x)</button>
+          <button onclick="normalSpeed()">Қалыпты (1x)</button>
+          <button onclick="fastSpeed()">Тез (1.5x)</button>
         </div>
       </div>
     </div>
@@ -230,7 +229,6 @@ document.getElementById('searchInput').addEventListener('input', async function 
     const res = await fetch(`/words/api/search?q=${encodeURIComponent(query)}`);
     const videos = await res.json();
 
-    // Удаляем дубликаты по ID
     const seen = new Set();
     const uniqueVideos = videos.filter(video => {
       if (seen.has(video._id)) return false;
@@ -239,7 +237,7 @@ document.getElementById('searchInput').addEventListener('input', async function 
     });
 
     if (uniqueVideos.length === 0) {
-      container.innerHTML = '<p>Ничего не найдено.</p>';
+      container.innerHTML = '<p> Ештеңе табылмады.</p>';
     } else {
       uniqueVideos.forEach(video => {
         const card = document.createElement('div');
@@ -258,7 +256,7 @@ document.getElementById('searchInput').addEventListener('input', async function 
       });
     }
   } catch (err) {
-    console.error('Ошибка при поиске:', err);
+    console.error('Іздеу кезінде қате табылды:', err);
   }
 });
 
