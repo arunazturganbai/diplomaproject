@@ -1,13 +1,140 @@
 <%- include('partials/header') %>
 
-  <main>
-    <h1>Сіздің аккаунтыңыз</h1>
-    
-    <div class="account-info">
-      <p><strong>Логин:</strong> <%= user.username %></p>
-      <p><strong>Email:</strong> <%= user.email %></p>
-      <p><strong>Тіркелген күн:</strong> <%= user.createdAt.toLocaleDateString() %></p>
+  <main class="account-container">
+    <div class="account-card">
+      <div class="account-header">
+        <h1 class="account-title">Сіздің аккаунтыңыз</h1>
+      </div>
+      
+      <div class="account-info">
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Логин:</span>
+            <span class="info-value"><%= user.username %></span>
+          </div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Email:</span>
+            <span class="info-value"><%= user.email %></span>
+          </div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Тіркелген күн:</span>
+            <span class="info-value"><%= user.createdAt.toLocaleDateString() %></span>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
 <%- include('partials/footer') %>
+
+<style>
+  .account-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px);
+    background-color: #FFF9E6;
+    padding: 20px;
+  }
+  
+  .account-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 33, 55, 0.1);
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-top: 5px solid #ffda00;
+  }
+  
+  .account-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+ 
+  
+  .account-title {
+    color: #002137;
+    margin-bottom: 10px;
+    font-size: 24px;
+  }
+  
+  .account-info {
+    margin-bottom: 30px;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .info-item:last-child {
+    border-bottom: none;
+  }
+  
+  .info-icon {
+    margin-right: 15px;
+    color: #002137;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .info-content {
+    flex: 1;
+  }
+  
+  .info-label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 3px;
+  }
+  
+  .info-value {
+    display: block;
+    font-size: 16px;
+    color: #002137;
+    font-weight: 500;
+  }
+  
+  
+  .edit-btn {
+    background-color: #002137;
+    color: white;
+  }
+  
+  .edit-btn:hover {
+    background-color: #003358;
+  }
+  
+</style>

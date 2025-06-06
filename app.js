@@ -241,16 +241,19 @@ app.get('/category/:id', async (req, res) => {
 });
 
 
-app.post('/admin/category/add', isAdmin, upload.single('image'), async (req, res) => {
+app.post('/admin/category/add', isAdmin, async (req, res) => {
   const { name } = req.body;
-  const image = req.file; // Информация о загруженном файле
 
-  // Сохраните путь к изображению в базе данных
-  const category = new Category({ name, imagePath: image.path });
-  await category.save();
-
-  res.redirect('/admin');
+  try {
+    const category = new Category({ name });
+    await category.save();
+    res.redirect('/admin');
+  } catch (error) {
+    console.error('Ошибка при сохранении категории:', error);
+    res.status(500).send('Не удалось сохранить категорию.');
+  }
 });
+
 
 
 

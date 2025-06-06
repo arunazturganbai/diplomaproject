@@ -1,7 +1,7 @@
 <%- include('partials/header') %>
 
-<style>
-        .modal {
+<style>      
+  .modal {
   display: none;
   position: fixed;
   z-index: 1000;
@@ -18,7 +18,7 @@
   padding: 20px;
   border-radius: 8px;
   width: 80%;
-  max-width: 800px;
+  max-width: 600px;
   position: relative;
 }
 
@@ -123,7 +123,7 @@
     padding: 20px;
     border-radius: 8px;
     width: 90%;
-    max-width: 800px;
+    max-width: 700px;
     position: relative;
   }
 
@@ -203,11 +203,6 @@
         <h2 id="videoTitle"></h2>
         <p id="videoDescription"></p>
         <div class="video-controls">
-          <button onclick="togglePlay()">Ойнату/Тоқтату</button>
-          <button onclick="slowSpeed()">Баяулату (0.5x)</button>
-          <button onclick="normalSpeed()">Қалыпты (1x)</button>
-          <button onclick="fastSpeed()">Тез (1.5x)</button>
-        </div>
       </div>
     </div>
   </div>
@@ -236,22 +231,7 @@
     modal.classList.remove('show');
   }
 
-  function togglePlay() {
-    const video = document.getElementById('modalVideo');
-    video.paused ? video.play() : video.pause();
-  }
 
-  function slowSpeed() {
-    document.getElementById('modalVideo').playbackRate = 0.5;
-  }
-
-  function normalSpeed() {
-    document.getElementById('modalVideo').playbackRate = 1.0;
-  }
-
-  function fastSpeed() {
-    document.getElementById('modalVideo').playbackRate = 1.5;
-  }
 
   window.onclick = function(event) {
     const modal = document.getElementById('videoModal');

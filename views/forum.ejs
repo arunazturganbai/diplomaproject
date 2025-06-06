@@ -10,81 +10,539 @@
   }
 %>
 
-<main>
-<% if (user) { %>
-  <form action="/comment" method="POST" class="comment-form">
-    <textarea name="content" placeholder="Пікіріңізді жазыңыз..." required></textarea>
-    <button type="submit">Пікірді жүктеу</button>
-  </form>
-<% } else { %>
-  <p class="login-prompt">Пікір қалдыру үшін <a href="/login">аккаунтқа кіру</a> қажет.</p>
-<% } %>
-
-<%
-  const repliesByParent = {};
-  comments.forEach(c => {
-    const parentId = c.parent ? c.parent.toString() : null;
-    if (!repliesByParent[parentId]) repliesByParent[parentId] = [];
-    repliesByParent[parentId].push(c);
-  });
-
-  function renderComments(parentId) {
-    const group = repliesByParent[parentId] || [];
-    group.forEach(comment => {
-%>
-<div class="comment <%= comment.user.isAdmin ? 'admin-comment' : '' %>">
-    <div class="comment-header">
-        <div class="avatar" style='background-color: <%= stringToPastelColor(comment.user.username) %>'>
-
-            <%= comment.user.username.charAt(0).toUpperCase() %>
-        </div>
-
-  <div class="header-main">
-    <span class="username"><%= comment.user.username %></span>
-  </div>
-  <span class="time"><%= comment.createdAt.toLocaleString() %></span>
-</div>
-
-    <div class="comment-content"><%= comment.content %></div>
-
-    <div class="comment-actions">
-      <% if (user) { %>
-        <button type="button" onclick="toggleReplyForm('<%= comment._id %>')">
-          🗨️ Жауап беру
-        </button>
-      <% } %>
-      <% if (user && (user._id.toString() === comment.user._id.toString() || user.isAdmin)) { %>
-        <form action="/comment/<%= comment._id %>/delete" method="POST">
-          <button type="submit">🗑️ Жою</button>
-        </form>
-      <% } %>
-    </div>
-
-    <% if (user) { %>
-      <form action="/comment" method="POST" class="reply-form" id="reply-form-<%= comment._id %>" style="display:none;">
-        <input type="hidden" name="parentId" value="<%= comment._id %>">
-        <textarea name="content" placeholder="Жауабыңызды жазыңыз..." required></textarea>
-        <button type="submit">Жауапты жүктеу</button>
-      </form>
-    <% } %>
-
-    <div class="replies">
-      <% renderComments(comment._id.toString()); %>
-    </div>
-  </div>
-<%
-    });
+<style>
+  :root {
+    --primary: #002137;
+    --secondary: #ffda00;
+    --background: #FFF9E6;
+    --card-bg: #FFFFFF;
+    --text: #333333;
+    --text-light: #666666;
+    --border: #e0e0e0;
+    --shadow: 0 4px 24px rgba(0, 33, 55, 0.08);
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  renderComments(null);
-%>
-</div>
+  main {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+  }
+  
+  .page-title {
+    color: var(--primary);
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 1rem;
+  }
+  
+  .page-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--secondary);
+    border-radius: 2px;
+  }
+  
+  .comment-form, .reply-form {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 3rem;
+    border: 1px solid var(--border);
+    transition: var(--transition);
+  }
+  
+  .comment-form:hover, .reply-form:hover {
+    box-shadow: 0 6px 28px rgba(0, 33, 55, 0.12);
+  }
+  
+  .comment-form h3, .reply-form h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    font-size: 1.3rem;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 1rem;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 120px;
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+  
+  textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 33, 55, 0.1);
+  }
+  
+  button[type="submit"] {
+    color: white;
+    border: none;
+    padding: 0.8rem 1.8rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+  
+  button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 33, 55, 0.15);
+  }
+  
+  .login-prompt {
+    text-align: center;
+    padding: 2.5rem;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    border: 1px dashed var(--border);
+  }
+  
+  .login-prompt a {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 2px;
+  }
+  
+  .login-prompt a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--secondary);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  
+  .login-prompt a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  
+  .comments-section h3 {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .comments-section h3::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--primary), transparent);
+    opacity: 0.2;
+  }
+  
+  .comment {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.8rem;
+    margin-bottom: 1.8rem;
+    box-shadow: var(--shadow);
+    position: relative;
+    border-left: 1px solid var(--secondary);
+    transition: var(--transition);
+    overflow: hidden;
+  }
+  
+  .comment::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--secondary);
+    transition: var(--transition);
+  }
+  
+  
+  .admin-comment {
+    border-left-color: var(--primary);
+  }
+  
+  .admin-comment::before {
+    background: var(--primary);
+  }
+  
+  .comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    gap: 15px;
+  }
+  
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.7);
+    flex-shrink: 0;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .avatar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+  }
+  
+  .header-main {
+    flex-grow: 1;
+  }
+  
+  .username {
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .time {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .time::before {
+    margin-right: 5px;
+  }
+  
+  .admin-badge {
+    background: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .comment-content {
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    padding: 0 0.8rem;
+    color: var(--text);
+    font-size: 1.05rem;
+  }
+  
+  .comment-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+    align-items: center; /* Выравнивает все элементы по центру по вертикали */
+  }
+  
+  .comment-actions button {
+    background: rgba(0, 33, 55, 0.05);
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+  }
+  
+  .comment-actions button:hover {
+    background: rgba(0, 33, 55, 0.1);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+  
+  .comment-actions svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .delete-form {
+    display: inline;
+}
+.delete-form button {
+  margin-top: 90px;
+}
+
+
+  .replies {
+    margin-left: 3rem;
+    padding-left: 2rem;
+    border-left: 2px dashed var(--border);
+    margin-top: 2rem;
+    position: relative;
+  }
+  
+  .replies::before {
+    content: '';
+    position: absolute;
+    top: -2rem;
+    left: -2px;
+    height: 2rem;
+    width: 2px;
+    background: var(--border);
+  }
+  
+  .reply-form {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-light);
+  }
+  
+  @media (max-width: 768px) {
+    main {
+      padding: 0 1rem;
+    }
+    
+    .replies {
+      margin-left: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    
+    .comment-header {
+      flex-wrap: wrap;
+    }
+    
+    .time {
+      width: 100%;
+      margin-top: 6px;
+      padding-left: 63px;
+    }
+    
+    .comment-form, .reply-form {
+      padding: 1.5rem;
+    }
+  }
+  
+
+</style>
+
+<main>
+  <h1 class="page-title">Пікірлер</h1>
+  
+  <% if (user) { %>
+    <form action="/comment" method="POST" class="comment-form" id="commentForm">
+      <h3>Өз пікіріңізді қалдырыңыз</h3>
+      <textarea name="content" placeholder="Пікіріңізді жазыңыз..." required></textarea>
+      <button type="submit">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/>
+        </svg>
+        Пікірді жүктеу
+      </button>
+    </form>
+  <% } else { %>
+    <p class="login-prompt">Пікір қалдыру үшін <a href="/login">аккаунтқа кіру</a> қажет.</p>
+  <% } %>
+
+  <div class="comments-section">
+    <h3>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" fill="var(--primary)"/>
+      </svg>
+      Пікірлер (<%= comments.length %>)
+    </h3>
+    
+    <% if (comments.length === 0) { %>
+      <div class="empty-state">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" fill="var(--border)"/>
+        </svg>
+        <p>Әзірше пікір жоқ. Бірінші болыңыз!</p>
+      </div>
+    <% } %>
+    
+    <%
+      const repliesByParent = {};
+      comments.forEach(c => {
+        const parentId = c.parent ? c.parent.toString() : null;
+        if (!repliesByParent[parentId]) repliesByParent[parentId] = [];
+        repliesByParent[parentId].push(c);
+      });
+
+      function renderComments(parentId) {
+        const group = repliesByParent[parentId] || [];
+        group.forEach(comment => {
+    %>
+    <div class="comment <%= comment.user.isAdmin ? 'admin-comment' : '' %>" id="comment-<%= comment._id %>">
+      <div class="comment-header">
+        <div class="avatar" style='background-color: <%= stringToPastelColor(comment.user.username) %>'>
+          <%= comment.user.username.charAt(0).toUpperCase() %>
+        </div>
+
+        <div class="header-main">
+          <span class="username">
+            <%= comment.user.username %>
+            <% if (comment.user.isAdmin) { %>
+              <span class="admin-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11V11.99z"/>
+                </svg>
+                Админ
+              </span>
+            <% } %>
+          </span>
+          <span class="time">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="var(--text-light)"/>
+            </svg>
+            <%= comment.createdAt.toLocaleString() %>
+          </span>
+        </div>
+      </div>
+
+      <div class="comment-content"><%= comment.content %></div>
+
+      <div class="comment-actions">
+        <% if (user) { %>
+          <button type="button" onclick="toggleReplyForm('<%= comment._id %>')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 9V5L3 12L10 19V14.9C15 14.9 18.5 16.5 21 20C20 15 17 10 10 9Z" fill="currentColor"/>
+            </svg>
+            Жауап беру
+          </button>
+        <% } %>
+        <% if (user && (user._id.toString() === comment.user._id.toString() || user.isAdmin)) { %>
+          <form action="/comment/<%= comment._id %>/delete" method="POST" class="delete-form">
+            <button type="submit">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="currentColor"/>
+              </svg>
+              Жою
+            </button>
+          </form>
+        <% } %>
+      </div>
+
+      <% if (user) { %>
+        <form action="/comment" method="POST" class="reply-form" id="reply-form-<%= comment._id %>" style="display:none;">
+          <h3><%= comment.user.username %>-ға жауап жазу</h3>
+          <input type="hidden" name="parentId" value="<%= comment._id %>">
+          <textarea name="content" placeholder="Жауабыңызды жазыңыз..." required></textarea>
+          <button type="submit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/>
+            </svg>
+            Жауапты жүктеу
+          </button>
+        </form>
+      <% } %>
+
+      <div class="replies">
+        <% renderComments(comment._id.toString()); %>
+      </div>
+    </div>
+    <%
+        });
+      }
+
+      renderComments(null);
+    %>
+  </div>
+  
+</main>
+
 <script>
   function toggleReplyForm(commentId) {
     const form = document.getElementById('reply-form-' + commentId);
     form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    
+    if (form.style.display === 'block') {
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      form.querySelector('textarea').focus();
+    }
+  }
+  
+  // Smooth scroll to comment form if URL has hash
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.location.hash) {
+      const element = document.getElementById(window.location.hash.substring(1));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+          element.style.animation = 'none';
+          setTimeout(() => {
+            element.style.animation = 'fadeIn 0.5s ease-out';
+          }, 10);
+        }, 100);
+      }
+    }
+  });
+  
+  // Highlight animation for new comments
+  if (window.location.hash) {
+    const comment = document.getElementById(window.location.hash.substring(1));
+    if (comment) {
+      comment.style.animation = 'fadeIn 1.5s ease-out';
+      setTimeout(() => {
+        comment.style.boxShadow = '0 0 0 3px rgba(255, 218, 0, 0.5)';
+        setTimeout(() => {
+          comment.style.boxShadow = '';
+        }, 2000);
+      }, 100);
+    }
   }
 </script>
-
 
 <%- include('partials/footer') %>

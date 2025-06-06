@@ -6,11 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="../public/logo-transparent.png" type="image/x-icon">
   <title>Карта жестовых языков Казахстана</title>
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
@@ -26,41 +23,6 @@
       color: #002137;
       min-height: 100vh;
       overflow-x: hidden;
-    }
-
-    .page-header {
-      text-align: center;
-      padding: 2rem 1rem;
-      background: linear-gradient(135deg, #002137 0%, #1a3a52 100%);
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .page-header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffda00" opacity="0.1"/><circle cx="75" cy="75" r="1.5" fill="%23ffda00" opacity="0.05"/><circle cx="50" cy="10" r="0.8" fill="%23ffda00" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-      opacity: 0.3;
-    }
-
-    .page-header h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .page-header p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      position: relative;
-      z-index: 1;
     }
 
     .main-container {
@@ -173,7 +135,20 @@
       background: #ffda00;
       color: #002137;
     }
-
+    .search-box {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      width: 250px;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
+    }
     #map {
       height: 70vh;
       min-height: 500px;
@@ -225,7 +200,7 @@
       line-height: 1.6;
     }
 
-    /* Custom Popup Styles */
+    /* Popup Styles */
     .custom-popup {
       font-family: 'Inter', sans-serif;
     }
@@ -316,10 +291,10 @@
 
     .modal-content {
       background: white;
-      margin: 2% auto;
+      margin: 0.3% auto;
       padding: 0;
       width: 60%;
-      max-width: 500px;
+      max-width: 550px;
       border-radius: 15px;
       position: relative;
       box-shadow: 0 20px 60px rgba(0,33,55,0.3);
@@ -436,7 +411,7 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Responsive Design */
+
     @media (max-width: 768px) {
       .page-header h1 {
         font-size: 2rem;
@@ -452,12 +427,12 @@
       }
       
       .map-container {
-        padding: 1rem;
+        padding: 3rem;
       }
       
       #map {
         height: 50vh;
-        min-height: 400px;
+        min-height: 300px;
       }
       
       .modal-content {
@@ -480,13 +455,7 @@
         padding: 1rem 0.5rem;
       }
       
-      .page-header {
-        padding: 1.5rem 1rem;
-      }
-      
-      .page-header h1 {
-        font-size: 1.8rem;
-      }
+
       
       .map-controls {
         justify-content: center;
@@ -500,43 +469,17 @@
   </style>
 </head>
 <body>
-  <!-- Page Header -->
-  <div class="page-header">
-    <h1><i class="fas fa-hands" style="margin-right: 0.5rem;"></i>Қазақстанның жестовых тілдер картасы</h1>
-    <p>Елдің әртүрлі аймақтарындағы жестовый тілдерді зерттеңіз</p>
-  </div>
-
-  <div class="main-container">
-    <!-- Statistics Bar -->
-    <div class="stats-bar">
-      <div class="stat-item">
-        <span class="stat-number">3</span>
-        <span class="stat-label">Қалалар</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">150+</span>
-        <span class="stat-label">Жестер</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">5+</span>
-        <span class="stat-label">Сағат видео</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">1000+</span>
-        <span class="stat-label">Көрушілер</span>
-      </div>
-    </div>
-
     <!-- Map Container -->
     <div class="map-container">
       <div class="map-header">
         <h2 class="map-title"><i class="fas fa-map-marked-alt"></i> Интерактивті карта</h2>
+        <input type="text" class="search-box" placeholder="Поиск города..." id="citySearch"></div>
         <div class="map-controls">
           <button class="control-btn active" onclick="toggleLayer('cities')">
             <i class="fas fa-city"></i> Қалалар
           </button>
-          <button class="control-btn" onclick="toggleLayer('regions')">
-            <i class="fas fa-map"></i> Облыстар
+          <button class="control-btn" onclick="toggleLayer('countries')">
+            <i class="fas fa-map"></i> Елдер
           </button>
           <button class="control-btn" onclick="resetView()">
             <i class="fas fa-home"></i> Бастапқы көрініс
@@ -546,36 +489,6 @@
       
       <div id="map"></div>
     </div>
-
-    <!-- Information Panel -->
-    <div class="info-panel">
-      <h2 style="color: #002137; margin-bottom: 1rem; text-align: center;">
-        <i class="fas fa-info-circle"></i> Жестовый тіл туралы ақпарат
-      </h2>
-      
-      <div class="info-grid">
-        <div class="info-card">
-          <h3><i class="fas fa-hand-paper"></i> Жестовый тіл деген не?</h3>
-          <p>Жестовый тіл - бұл негізінен қол қимылдары, бет-әлпет өрнектері және дене қозғалыстары арқылы жүзеге асырылатын табиғи тіл. Ол есту қабілеті шектеулі адамдардың негізгі қарым-қатынас құралы болып табылады.</p>
-        </div>
-        
-        <div class="info-card">
-          <h3><i class="fas fa-globe-asia"></i> Қазақстандағы жестовый тіл</h3>
-          <p>Қазақстанда қазақ жестовый тілі (ҚЖТ) мен орыс жестовый тілі (ОЖТ) қолданылады. Әртүрлі аймақтарда ерекшеліктер мен диалектілер бар, бұл тілдік алуандықты дәлелдейді.</p>
-        </div>
-        
-        <div class="info-card">
-          <h3><i class="fas fa-users"></i> Қауымдастық</h3>
-          <p>Қазақстанда 120,000-нан астам есту қабілеті шектеулі адам тұрады. Жестовый тіл олардың мәдениеті мен қоғамдастығының маңызды бөлігі болып табылады.</p>
-        </div>
-        
-        <div class="info-card">
-          <h3><i class="fas fa-graduation-cap"></i> Білім беру</h3>
-          <p>Жестовый тілді үйрену инклюзивті қоғам құруға және есту қабілеті шектеулі адамдармен тиімді қарым-қатынас орнатуға көмектеседі.</p>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Enhanced Video Modal -->
   <div id="videoModal" class="modal">
@@ -593,8 +506,6 @@
         <div class="video-info">
           <h3 id="videoInfoTitle">Видео туралы ақпарат</h3>
           <p id="videoInfoDescription">Бұл видеода қаланың жестовый тілінің ерекшеліктері көрсетілген.</p>
-          <p><strong>Ұзақтығы:</strong> <span id="videoDuration">Жүктеп жатыр...</span></p>
-          <p><strong>Тіл:</strong> Қазақ жестовый тілі</p>
         </div>
       </div>
     </div>
@@ -602,7 +513,7 @@
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
+ <script>
     // Initialize map centered on Kazakhstan
     const map = L.map('map', {
       zoomControl: true,
@@ -627,33 +538,46 @@
         name: "Алматы",
         coords: [43.2567, 76.9286],
         videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B.MOV",
-        population: "2,000,000",
-        signers: "15,000+",
-        description: "Қазақстанның ең үлкен қаласы, жестовый тіл қауымдастығының орталығы",
-        specialties: ["Сауда жестері", "Мәдени өрнектер", "Қаламанданған ерекшеліктер"]
+        description: "Қазақстанның ең үлкен қаласы, жестовый тіл қауымдастығының орталығы"
       },
       {
         name: "Астана",
         coords: [51.1282, 71.4307],
         videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0.MOV",
-        population: "1,350,000",
-        signers: "8,000+",
-        description: "Қазақстанның астанасы, мемлекеттік мекемелердің жестовый тілі",
-        specialties: ["Ресми жестер", "Мемлекеттік терминдер", "Заманауи нысандар"]
+        description: "Қазақстанның астанасы, мемлекеттік мекемелердің жестовый тілі"
       },
       {
         name: "Қарағанды",
         coords: [49.8047, 73.1036],
         videoUrl: "https://your-cloud-storage.com/path/to/karaganda-sign.mp4",
-        population: "500,000",
-        signers: "3,500+",
-        description: "Орталық Қазақстанның өнеркәсіп орталығы",
-        specialties: ["Өнеркәсіптік жестер", "Шахта терминдері", "Аймақтық диалект"]
+        description: "Орталық Қазақстанның өнеркәсіп орталығы"
+      }
+    ];
+
+    // Countries data
+    const countries = [
+      {
+        name: "Қазақстан",
+        coords: [48.0196, 66.9237],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/kazakhstan.MOV",
+        description: "Қазақстан жестовый тілінің негізгі нұсқасы"
+      },
+      {
+        name: "Ресей",
+        coords: [61.5240, 105.3188],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/russia.MOV",
+        description: "Ресей жестовый тілі (РЖЯ)"
+      },
+      {
+        name: "Қырғызстан",
+        coords: [41.2044, 74.7661],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/kyrgyzstan.MOV",
+        description: "Қырғызстан жестовый тілі"
       }
     ];
 
     // Custom marker icons
-    const createCustomIcon = (color) => {
+    const createCustomIcon = (color, icon = 'fa-hands') => {
       return L.divIcon({
         className: 'custom-marker',
         html: `
@@ -669,7 +593,7 @@
             align-items: center;
             justify-content: center;
           ">
-            <i class="fas fa-hands" style="
+            <i class="fas ${icon}" style="
               color: white;
               font-size: 10px;
               transform: rotate(45deg);
@@ -682,12 +606,12 @@
       });
     };
 
-    // Add markers to map with enhanced popups
-    const markers = [];
+    // Add city markers to map
+    const cityMarkers = [];
     cities.forEach((city, index) => {
       const colors = ['#ffda00', '#002137', '#ff6b6b'];
       const marker = L.marker(city.coords, {
-        icon: createCustomIcon(colors[index % colors.length])
+        icon: createCustomIcon(colors[index % colors.length], 'fa-city')
       }).addTo(map);
       
       const popupContent = `
@@ -697,16 +621,6 @@
             <div class="popup-subtitle">${city.description}</div>
           </div>
           <div class="popup-content">
-            <div class="popup-stats">
-              <div class="popup-stat">
-                <span class="popup-stat-number">${city.population}</span>
-                Халық саны
-              </div>
-              <div class="popup-stat">
-                <span class="popup-stat-number">${city.signers}</span>
-                Жестовый тіл пайдаланушылары
-              </div>
-            </div>
             <button 
               onclick="openVideoModal('${city.name}', '${city.videoUrl}', ${JSON.stringify(city).replace(/"/g, '&quot;')})"
               class="city-button"
@@ -723,7 +637,41 @@
         className: 'custom-popup-container'
       });
       
-      markers.push(marker);
+      cityMarkers.push(marker);
+    });
+
+    // Add country markers (not added to map initially)
+    const countryMarkers = [];
+    countries.forEach((country, index) => {
+      const colors = ['#002137', '#ff6b6b', '#4CAF50'];
+      const marker = L.marker(country.coords, {
+        icon: createCustomIcon(colors[index % colors.length], 'fa-globe')
+      });
+      
+      const popupContent = `
+        <div class="custom-popup">
+          <div class="popup-header">
+            <div class="popup-title">${country.name}</div>
+            <div class="popup-subtitle">${country.description}</div>
+          </div>
+          <div class="popup-content">
+            <button 
+              onclick="openVideoModal('${country.name}', '${country.videoUrl}', ${JSON.stringify(country).replace(/"/g, '&quot;')})"
+              class="city-button"
+            >
+              <i class="fas fa-play"></i>
+              ${country.name} жестовый тілін көру
+            </button>
+          </div>
+        </div>
+      `;
+      
+      marker.bindPopup(popupContent, {
+        maxWidth: 300,
+        className: 'custom-popup-container'
+      });
+      
+      countryMarkers.push(marker);
     });
 
     // Map control functions
@@ -739,18 +687,27 @@
       activeLayer = layerType;
       
       if (layerType === 'cities') {
-        markers.forEach(marker => marker.addTo(map));
-      } else if (layerType === 'regions') {
-        // Hide city markers and show regional boundaries (future feature)
-        markers.forEach(marker => map.removeLayer(marker));
-        // Add regional boundaries here when available
+        // Show cities, hide countries
+        cityMarkers.forEach(marker => marker.addTo(map));
+        countryMarkers.forEach(marker => map.removeLayer(marker));
+        map.setView([48.0196, 66.9237], 5);
+      } else if (layerType === 'countries') {
+        // Show countries, hide cities
+        countryMarkers.forEach(marker => marker.addTo(map));
+        cityMarkers.forEach(marker => map.removeLayer(marker));
+        
+        // Fit view to show all countries
+        const countryGroup = new L.featureGroup(countryMarkers);
+        map.fitBounds(countryGroup.getBounds().pad(0.5));
       }
     };
 
     window.resetView = function() {
-      map.setView([48.0196, 66.9237], 5);
       if (activeLayer === 'cities') {
-        markers.forEach(marker => marker.addTo(map));
+        map.setView([48.0196, 66.9237], 5);
+      } else {
+        const countryGroup = new L.featureGroup(countryMarkers);
+        map.fitBounds(countryGroup.getBounds().pad(0.5));
       }
     };
 
@@ -761,35 +718,21 @@
     const modalTitle = document.getElementById('modalTitle');
     const videoInfoTitle = document.getElementById('videoInfoTitle');
     const videoInfoDescription = document.getElementById('videoInfoDescription');
-    const videoDuration = document.getElementById('videoDuration');
+    const citySearch = document.getElementById('citySearch');
     
-    window.openVideoModal = function(cityName, videoUrl, cityData) {
-      const city = typeof cityData === 'string' ? JSON.parse(cityData.replace(/&quot;/g, '"')) : cityData;
+    window.openVideoModal = function(name, videoUrl, data) {
+      const item = typeof data === 'string' ? JSON.parse(data.replace(/&quot;/g, '"')) : data;
       
-      modalTitle.textContent = `${cityName} қаласының жестовый тілі`;
-      videoInfoTitle.textContent = `${cityName} туралы толығырақ`;
-      videoInfoDescription.textContent = city.description || `${cityName} қаласының жестовый тілінің ерекшеліктері мен мәдени аспектілері.`;
+      modalTitle.textContent = `${name}`;
+      videoInfoTitle.textContent = `${name}`;
+      videoInfoDescription.textContent = item.description || `${name} жестовый тілінің ерекшеліктері мен мәдени аспектілері.`;
       
       videoPlayer.src = videoUrl;
       videoPlayer.load();
       
-      // Update duration when metadata loads
-      videoPlayer.addEventListener('loadedmetadata', function() {
-        const duration = Math.floor(videoPlayer.duration);
-        const minutes = Math.floor(duration / 60);
-        const seconds = duration % 60;
-        videoDuration.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-      });
-      
-      videoPlayer.addEventListener('error', function() {
-        videoDuration.textContent = 'Видео жүктелмеді';
-        videoInfoDescription.textContent = 'Кешіріңіз, видео қазір қол жетімсіз. Кейінірек қайталап көріңіз.';
-      });
-      
       modal.style.display = 'block';
-      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      document.body.style.overflow = 'hidden';
       
-      // Auto-play with error handling
       setTimeout(() => {
         videoPlayer.play().catch(e => {
           console.log("Автоматты ойнату блокталды:", e);
@@ -797,29 +740,35 @@
       }, 300);
     };
     
-    // Close modal function
-        function closeModal() {
+    function closeModal() {
       modal.style.display = 'none';
       videoPlayer.pause();
       videoPlayer.currentTime = 0;
-      document.body.style.overflow = 'auto'; // Restore scrolling
+      document.body.style.overflow = 'auto';
     }
     
-    // Bind close events
     closeBtn.addEventListener('click', closeModal);
     
-    // Close when clicking outside the modal
     modal.addEventListener('click', function(event) {
       if (event.target === modal) {
         closeModal();
       }
     });
     
-    // Close with Escape key
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Escape' && modal.style.display === 'block') {
         closeModal();
       }
     });
- </script>
+     // Поиск городов
+    citySearch.addEventListener('input', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+      
+      cities.forEach(city => {
+        if (city.name.toLowerCase().includes(searchTerm)) {
+          map.setView(city.coords, 10);
+        }
+      });
+    });
+</script>
   <%- include('partials/footer') %>

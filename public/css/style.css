@@ -290,7 +290,7 @@ main {
 }
 
 .delete-form button {
-  background: #e74c3c;
+  background-color: #e74c3c;
   color: white;
   border: none;
   padding: 0.2rem 0.5rem;

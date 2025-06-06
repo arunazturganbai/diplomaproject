@@ -27,15 +27,13 @@
       </form>
     </section>
     
-    <section class="admin-section">
+  <section class="admin-section">
   <h2>Категорияларды басқару</h2>
   <div class="category-list">
     <% categories.forEach(category => { %>
       <div class="category-item" data-id="<%= category._id %>" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
         <span><%= category.name %></span>
-        <button class="delete-category-btn" style="background:#c0392b;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">
-          Жою
-        </button>
+        <button type="submit">Жою</button>
       </div>
     <% }); %>
   </div>
@@ -74,8 +72,6 @@
         <% }); %>
       </div>
     </section>
-
-    
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.delete-category-btn').forEach(button => {
