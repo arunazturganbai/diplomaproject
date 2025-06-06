@@ -7,6 +7,8 @@ const ejs = require('ejs');
 const path = require('path');
 const app = express();
 const Task = require('./models/Task');
+const multer = require('multer');
+
 
 // Подключение к MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -20,9 +22,11 @@ const Category = require('./models/Category');
 const Comment = require('./models/Comment');
 const taskRoutes = require('./routes/tasks');
 const wordRoutes = require('./routes/words');
-
+const upload = multer({ dest: 'uploads/' });
 app.use('/words', wordRoutes);
 app.use('/tasks', taskRoutes);
+app.use('/uploads', express.static('uploads'));
+
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -62,6 +66,8 @@ const isAdmin = (req, res, next) => {
 };
 
 // Маршруты
+app.get('/map', (req, res) => res.render('map')); 
+
 app.get('/', async (req, res) => {
   const videos = await Video.find().populate('category');
   res.render('index', { user: req.session.user, videos });
@@ -236,12 +242,17 @@ app.get('/category/:id', async (req, res) => {
 });
 
 
-app.post('/admin/category/add', isAdmin, async (req, res) => {
+app.post('/admin/category/add', isAdmin, upload.single('image'), async (req, res) => {
   const { name } = req.body;
-  const category = new Category({ name });
+  const image = req.file; // Информация о загруженном файле
+
+  // Сохраните путь к изображению в базе данных
+  const category = new Category({ name, imagePath: image.path });
   await category.save();
+
   res.redirect('/admin');
 });
+
 
 app.post('/admin/tasks', isAdmin, async (req, res) => {
   try {

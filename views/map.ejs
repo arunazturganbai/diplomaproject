@@ -1,0 +1,181 @@
+<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="../public/logo-transparent.png" type="image/x-icon">
+  <title>Карта жестовых языков</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ecebd7;
+}
+    #map {
+    height: 80vh;
+    margin-top: 15px;
+    width: 90%;
+    border-radius: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10px;
+    bottom: 10px; 
+}
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1000;
+    }
+    .modal-content {
+      background: white;
+      margin: 0.5% auto;
+      padding: 10px;
+      width: 80%;
+      top: 0.5%;
+      max-width: 800px;
+      border-radius: 10px;
+      position: relative;
+    }
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 соотношение */
+      height: 0;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .video-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .city-button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+    <div id="map"></div>
+
+  <!-- Модальное окно для видео -->
+  <div id="videoModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2 id="modalTitle">Жестовый язык</h2>
+      <div class="video-container">
+        <video id="modalVideo" controls>
+          Ваш браузер не поддерживает видео элемент.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Инициализация карты (центр на Казахстане)
+    const map = L.map('map').setView([48.0196, 66.9237], 4);
+    
+    // Добавляем слой карты OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // Данные городов с ссылками на видео в гугл сторадж
+    const cities = [
+      {
+        name: "Алматы",
+        coords: [43.2567, 76.9286],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B.MOV"
+      },
+      {
+        name: "Астана",
+        coords: [51.1282, 71.4307],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0.MOV"
+      },
+      {
+        name: "Караганда",
+        coords: [49.8047, 73.1036],
+        videoUrl: "https://your-cloud-storage.com/path/to/karaganda-sign.mp4"
+      }
+    ];
+
+    // маркеры на карту
+    cities.forEach(city => {
+      L.marker(city.coords)
+        .addTo(map)
+        .bindPopup(`
+          <b>${city.name}</b>
+          <button 
+            onclick="openVideoModal('${city.name}', '${city.videoUrl}')" 
+            class="city-button"
+          >
+            Показать жесты
+          </button>
+        `);
+    });
+
+    // Управление модальным окном
+    const modal = document.getElementById('videoModal');
+    const closeBtn = document.querySelector('.close-modal');
+    const videoPlayer = document.getElementById('modalVideo');
+    
+    // Функция открытия модального окна
+    window.openVideoModal = function(cityName, videoUrl) {
+      document.getElementById('modalTitle').textContent = `Жестовый язык: ${cityName}`;
+      videoPlayer.src = videoUrl;
+      videoPlayer.load();
+      
+      // Попытка автовоспроизведения (может не работать без жеста пользователя)
+      videoPlayer.play().catch(e => {
+        console.log("Автовоспроизведение заблокировано:", e);
+      });
+      
+      modal.style.display = 'block';
+    }
+    
+    // Закрытие модального окна
+    closeBtn.onclick = function() {
+      modal.style.display = 'none';
+      videoPlayer.pause();
+      videoPlayer.currentTime = 0;
+    }
+    
+    // Закрытие при клике вне окна
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0;
+      }
+    }
+  </script>
+</body>
+</html>
+<%- include('partials/footer') %>

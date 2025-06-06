@@ -32,7 +32,7 @@
     const group = repliesByParent[parentId] || [];
     group.forEach(comment => {
 %>
-  <div class="comment">
+<div class="comment <%= comment.user.isAdmin ? 'admin-comment' : '' %>">
     <div class="comment-header">
         <div class="avatar" style='background-color: <%= stringToPastelColor(comment.user.username) %>'>
 
@@ -78,6 +78,7 @@
 
   renderComments(null);
 %>
+</div>
 <script>
   function toggleReplyForm(commentId) {
     const form = document.getElementById('reply-form-' + commentId);

@@ -1,10 +1,10 @@
 <%- include('partials/header') %>
 
   <main>
-    <h1>Admin Panel</h1>
+    <h1>Админ Панелі</h1>
     
     <section class="admin-section">
-      <h2>Add New Video</h2>
+      <h2>Жаңа видео қосу</h2>
       <form action="/admin/video/add" method="POST">
         <input type="text" name="title" placeholder="Title" required>
         <textarea name="description" placeholder="Description" required></textarea>
@@ -15,17 +15,19 @@
             <option value="<%= category._id %>"><%= category.name %></option>
           <% }); %>
         </select>
-        <button type="submit">Add Video</button>
+        <button type="submit">Видео жүктеу</button>
       </form>
     </section>
     
     <section class="admin-section">
-      <h2>Add New Category</h2>
-      <form action="/admin/category/add" method="POST">
+      <h2>Жаңа категория қосу</h2>
+      <form action="/admin/category/add" method="POST" enctype="multipart/form-data">
         <input type="text" name="name" placeholder="Category Name" required>
-        <button type="submit">Add Category</button>
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit">Категория қосу</button>
       </form>
     </section>
+
     
     <section class="admin-section">
       <h2>Manage Videos</h2>
