@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
     
     req.flash('success', `Добро пожаловать, ${user.username}!`);
     
-    // Redirect admin to admin panel, user to home
+    // админ/юзер перенаправление
     if (user.role === 'admin') {
       res.redirect('/admin');
     } else {
@@ -63,7 +63,7 @@ router.post('/register', async (req, res) => {
   try {
     const { username, email, password, confirmPassword } = req.body;
     
-    // Validation
+
     if (password !== confirmPassword) {
       req.flash('error', 'Пароли не совпадают');
       return res.redirect('/auth/register');
@@ -74,7 +74,7 @@ router.post('/register', async (req, res) => {
       return res.redirect('/auth/register');
     }
     
-    // Check if user exists
+    // проверка на существование пользователя
     const existingUser = await User.findOne({ 
       $or: [{ email }, { username }] 
     });
@@ -84,7 +84,7 @@ router.post('/register', async (req, res) => {
       return res.redirect('/auth/register');
     }
     
-    // Create user
+
     const user = new User({
       username,
       email,

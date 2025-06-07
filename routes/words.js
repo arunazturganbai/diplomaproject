@@ -4,14 +4,14 @@ const { ensureAuthenticated } = require('../middleware/auth');
 const SignWord = require('../models/Video');
 const Category = require('../models/Category');
 
-// API-поиск для AJAX
+// API-поиск 
 router.get('/api/search', async (req, res) => {
   try {
     const query = req.query.q;
     const regex = new RegExp(query, 'i');
     const words = await SignWord.find({ title: regex }).populate('category');
 
-    res.json(words); // отправляем JSON
+    res.json(words); 
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
@@ -19,7 +19,7 @@ router.get('/api/search', async (req, res) => {
 });
 
 
-// === ВСЕ слова ===
+// ВСЕ слова
 router.get('/', async (req, res) => {
   try {
     const words = await SignWord.find().populate('category');
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// === По категории ===
+
 router.get('/category/:id', async (req, res) => {
   try {
     const words = await SignWord.find({ category: req.params.id }).populate('category');
@@ -44,7 +44,7 @@ router.get('/category/:id', async (req, res) => {
   }
 });
 
-// === Конкретное слово — СТАВИМ В САМОМ КОНЦЕ ===
+// Конкретное слово 
 router.get('/:id', async (req, res) => {
   try {
     const word = await SignWord.findById(req.params.id).populate('category');

@@ -15,7 +15,7 @@ module.exports = {
     res.redirect('/');
   },
   
-  // Новый middleware для проверки владельца комментария
+  //мидлвэйр для проверки владельца комментария
   ensureCommentOwner: function(req, res, next) {
     Comment.findById(req.params.id)
       .then(comment => {

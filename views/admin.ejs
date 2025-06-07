@@ -88,7 +88,7 @@
           });
 
           if (res.ok) {
-            categoryItem.remove(); // удаляем элемент из DOM
+            categoryItem.remove();
           } else {
             const error = await res.json();
             alert('Қате: ' + error.message);

@@ -83,7 +83,7 @@ router.post('/comments', requireAuth, async (req, res) => {
     
     await comment.save();
     
-    // If it's a reply, add to parent's replies array
+
     if (parentComment) {
       await Comment.findByIdAndUpdate(parentComment, {
         $push: { replies: comment._id }
@@ -110,7 +110,7 @@ router.put('/comments/:id', requireAuth, async (req, res) => {
       return res.redirect('/forum');
     }
     
-    // Check if user owns the comment
+   
     if (comment.author.toString() !== req.session.user.id) {
       req.flash('error', 'Вы можете редактировать только свои комментарии');
       return res.redirect('/forum');
@@ -150,13 +150,13 @@ router.delete('/comments/:id', requireAuth, async (req, res) => {
       return res.redirect('/forum');
     }
     
-    // Check if user owns the comment or is admin
+   
     if (comment.author.toString() !== req.session.user.id && req.session.user.role !== 'admin') {
       req.flash('error', 'Вы можете удалять только свои комментарии');
       return res.redirect('/forum');
     }
     
-    // Soft delete
+
     comment.isActive = false;
     await comment.save();
     
@@ -169,7 +169,7 @@ router.delete('/comments/:id', requireAuth, async (req, res) => {
   }
 });
 
-// POST /forum/comments/:id/like
+
 router.post('/comments/:id/like', requireAuth, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
@@ -182,10 +182,10 @@ router.post('/comments/:id/like', requireAuth, async (req, res) => {
     const likeIndex = comment.likes.indexOf(userId);
     
     if (likeIndex > -1) {
-      // Unlike
+      
       comment.likes.splice(likeIndex, 1);
     } else {
-      // Like
+      
       comment.likes.push(userId);
     }
     

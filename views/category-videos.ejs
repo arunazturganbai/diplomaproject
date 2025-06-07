@@ -63,7 +63,7 @@
     <p>Бұл категорияға видеолар әлі жүктелмеді</p>
   <% } %>
 </div>
-<!-- Модальное окно -->
+
 <div id="videoModal" class="modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeVideoModal()">&times;</span>
@@ -93,7 +93,7 @@
     modal.style.display = 'none';
   }
 
-  // Закрытие при клике вне модального окна
+ 
   window.onclick = function(event) {
     const modal = document.getElementById('videoModal');
     if (event.target == modal) {

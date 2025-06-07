@@ -387,7 +387,7 @@
       margin-bottom: 0.5rem;
     }
 
-    /* Loading States */
+  
     .loading {
       display: flex;
       align-items: center;
@@ -469,11 +469,10 @@
   </style>
 </head>
 <body>
-    <!-- Map Container -->
     <div class="map-container">
       <div class="map-header">
         <h2 class="map-title"><i class="fas fa-map-marked-alt"></i> Интерактивті карта</h2>
-        <input type="text" class="search-box" placeholder="Поиск города..." id="citySearch"></div>
+        <input type="text" class="search-box" placeholder="Қаланы іздеу..." id="citySearch"></div>
         <div class="map-controls">
           <button class="control-btn active" onclick="toggleLayer('cities')">
             <i class="fas fa-city"></i> Қалалар
@@ -490,11 +489,11 @@
       <div id="map"></div>
     </div>
 
-  <!-- Enhanced Video Modal -->
+
   <div id="videoModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 id="modalTitle">Жестовый тіл</h2>
+        <h2 id="modalTitle">Ым-ишара тіл</h2>
         <span class="close-modal">&times;</span>
       </div>
       <div class="modal-body">
@@ -505,16 +504,15 @@
         </div>
         <div class="video-info">
           <h3 id="videoInfoTitle">Видео туралы ақпарат</h3>
-          <p id="videoInfoDescription">Бұл видеода қаланың жестовый тілінің ерекшеліктері көрсетілген.</p>
+          <p id="videoInfoDescription">Бұл видеода қаланың ым-ишара тілінің ерекшеліктері көрсетілген.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Leaflet JS -->
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
  <script>
-    // Initialize map centered on Kazakhstan
     const map = L.map('map', {
       zoomControl: true,
       scrollWheelZoom: true,
@@ -525,58 +523,212 @@
       touchZoom: true
     }).setView([48.0196, 66.9237], 5);
     
-    // Add custom tile layer with better styling
+
     const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | Жестовый тілдер картасы',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | Ым-ишарасы тілдер картасы',
       maxZoom: 18,
       minZoom: 4
     }).addTo(map);
 
-    // Enhanced city data with more information
+
     const cities = [
       {
         name: "Алматы",
         coords: [43.2567, 76.9286],
         videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B.MOV",
-        description: "Қазақстанның ең үлкен қаласы, жестовый тіл қауымдастығының орталығы"
+        description: "Қазақстанның ең үлкен қаласының бірі"
       },
       {
         name: "Астана",
         coords: [51.1282, 71.4307],
         videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%90%D1%81%D1%82%D0%B0%D0%BD%D0%B0.MOV",
-        description: "Қазақстанның астанасы, мемлекеттік мекемелердің жестовый тілі"
+        description: "Қазақстанның астанасы"
       },
       {
         name: "Қарағанды",
         coords: [49.8047, 73.1036],
-        videoUrl: "https://your-cloud-storage.com/path/to/karaganda-sign.mp4",
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%9A%D0%B0%D1%80%D0%B0%D0%B3%D0%B0%D0%BD%D0%B4%D1%8B.MOV",
         description: "Орталық Қазақстанның өнеркәсіп орталығы"
-      }
+      },
+      {
+        name: "Шымкент",
+        coords: [42.3417, 69.5901],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%A8%D1%8B%D0%BC%D0%BA%D0%B5%D0%BD%D1%82.MOV",
+        description: "Қазақстанның үшінші мегаполисі, Оңтүстіктегі ірі қала"
+      },
+      {
+        name: "Орал",
+        coords: [51.2333, 51.3667],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%9E%D1%80%D0%B0%D0%BB.MOV",
+        description: "Батыс Қазақстандағы көне қалалардың бірі"
+      },
+      {
+        name: "Ақтөбе",
+        coords: [50.2833, 57.1667],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%90%D0%BA%D1%82%D0%BE%D0%B1%D0%B5.MOV",
+        description: "Батыс Қазақстандағы ірі өнеркәсіптік қала"
+      },
+      {
+        name: "Тараз",
+        coords: [42.9, 71.3667],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%A2%D0%B0%D1%80%D0%B0%D0%B7.MOV",
+        description: "2000 жылдық тарихы бар көне қала"
+      },
+      {
+        name: "Павлодар",
+        coords: [52.3, 76.95],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%9F%D0%B0%D0%B2%D0%BB%D0%BE%D0%B4%D0%B0%D1%80.MOV",
+        description: "Ертіс өзенінің бойындағы индустриялық қала"
+      },
+      {
+        name: "Семей",
+        coords: [50.4111, 80.2275],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9.MOV",
+        description: "Абай туған аймақ, мәдени және тарихи орталық"
+      },
+      {
+        name: "Қызылорда",
+        coords: [44.85, 65.5],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%9A%D1%8B%D0%B7%D1%8B%D0%BB%D0%BE%D1%80%D0%B4%D0%B0.MOV",
+        description: "Сырдария өзенінің бойындағы тарихи қала"
+      },
+      {
+        name: "Көкшетау",
+        coords: [53.2833, 69.3833],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%9A%D0%BE%D0%BA%D1%88%D0%B5%D1%82%D0%B0%D1%83.MOV",
+        description: "Көрікті табиғатымен танымал Солтүстік Қазақстан қаласы"
+      },
+      {
+        name: "Қостанай",
+        coords: [53.2, 63.6333],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%9A%D0%BE%D1%81%D1%82%D0%B0%D0%BD%D0%B0%D0%B9.MOV",
+        description: "Ауыл шаруашылығы дамыған облыс орталығы"
+      },
+
+      {
+        name: "Петропавл", 
+        coords: [54.8833, 69.15],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%9F%D0%B5%D1%82%D1%80%D0%BE%D0%BF%D0%B0%D0%B2%D0%BB%D0%BE%D0%B2%D1%81%D0%BA.MOV",
+        description: "Солтүстік Қазақстанның маңызды қаласы"
+      },
+      {
+        name: "Түркістан", 
+        coords: [43.2973, 68.2544], 
+        videoUrl: "https://storage.googleapis.com/kazsign/country/turkistan.MOV",
+        description: "Қожа Ахмет Ясауи кесенесімен әйгілі рухани қала"
+      },
+      {
+        name: "Жезқазған",
+        coords: [47.8031, 67.7111],
+        videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%96%D0%B5%D0%B7%D0%BA%D0%B0%D0%B7%D0%B3%D0%B0%D0%BD.MOV",  
+        description: "Мыс өндірумен танымал өнеркәсіптік қала"
+      },
+      {
+      name: "Екібастұз",  
+      coords: [51.7291, 75.3221],  
+      videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%AD%D0%BA%D0%B8%D0%B1%D0%B0%D1%81%D1%82%D1%83%D0%B7.MOV",  
+      description: "Көмір кен орындарымен әйгілі қала"
+    },
+
+    {  
+      name: "Атырау",  
+      coords: [47.1167, 51.8833],
+      videoUrl: "https://storage.googleapis.com/kazsign/city/%D0%90%D1%82%D1%8B%D1%80%D0%B0%D1%83.MOV",
+      description: "Каспий теңізі маңындағы мұнайлы қала"
+    }
+
+      
     ];
 
-    // Countries data
+
     const countries = [
       {
         name: "Қазақстан",
         coords: [48.0196, 66.9237],
         videoUrl: "https://storage.googleapis.com/kazsign/country/kazakhstan.MOV",
-        description: "Қазақстан жестовый тілінің негізгі нұсқасы"
+        description: "Орталық Азиядағы ең үлкен мемлекет, табиғи ресурстарға бай және көпұлтты ел"
       },
       {
         name: "Ресей",
         coords: [61.5240, 105.3188],
         videoUrl: "https://storage.googleapis.com/kazsign/country/russia.MOV",
-        description: "Ресей жестовый тілі (РЖЯ)"
+        description: "Әлемдегі ең үлкен мемлекет, Еуропа мен Азияны қамтитын алпауыт держава"
       },
       {
-        name: "Қырғызстан",
-        coords: [41.2044, 74.7661],
-        videoUrl: "https://storage.googleapis.com/kazsign/country/kyrgyzstan.MOV",
-        description: "Қырғызстан жестовый тілі"
+        name: "Өзбекстан",
+        coords: [41.3775, 64.5853], 
+        videoUrl: "https://storage.googleapis.com/kazsign/country/ozbekistan.MOV",  
+        description: "Орталық Азиядағы тарихи қалаларымен және мәдениетімен танымал ел"
+      },
+      {
+        name: "Түркия",
+        coords: [38.9637, 35.2433],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/turkey.MOV",
+        description: "Еуропа мен Азияны жалғап тұрған, бай тарихы мен сәулеті бар мемлекет"
+      },
+      {
+        name: "Қытай",
+        coords: [35.8617, 104.1954],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/china.MOV",
+        description: "Әлемдегі ең халқы көп ел, ежелгі өркениет пен заманауи технология орталығы"
+      },
+      {
+        name: "АҚШ",
+        coords: [37.0902, -95.7129],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/usa.MOV",
+        description: "Әлемдік экономика мен мәдениетке ықпал ететін алдыңғы қатарлы мемлекет"
+      },
+      {
+        name: "Франция",
+        coords: [46.2276, 2.2137],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/france.MOV",
+        description: "Өнерімен, сәнімен және тарихымен әйгілі Еуропа елдерінің бірі"
+      },
+      {
+        name: "Германия",
+        coords: [51.1657, 10.4515],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/germany.MOV",
+        description: "Экономикасы күшті, инженерлік жетістіктерімен танымал Орталық Еуропа мемлекеті"
+      },
+      {
+        name: "Жапония",
+        coords: [36.2048, 138.2529],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/japan.MOV",
+        description: "Технологиясы мен дәстүрін үйлестірген Шығыс Азия арал елі"
+      },
+      {
+        name: "Корея",
+        coords: [35.9078, 127.7669],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/korea.MOV",
+        description: "Жоғары технологиялар мен поп-мәдениетімен танымал заманауи мемлекет"
+      },
+      {
+        name: "Италия",
+        coords: [41.8719, 12.5674],
+        videoUrl: "https://your-cloud-storage.com/path/to/italy.MOV",
+        description: "Өнері, тарихы және дәмді асханасымен әйгілі Еуропа елі"
+      },
+      {
+        name: "Испания",
+        coords: [40.4637, -3.7492],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/italy.MOV",
+        description: "Жарқын мәдениеті мен жылы климаты бар Еуропаның оңтүстігіндегі ел"
+      },
+      {
+        name: "Үндістан",
+        coords: [20.5937, 78.9629],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/india.MOV",
+        description: "Бай мәдениеті мен дәстүрі бар Оңтүстік Азиядағы ең үлкен демократия"
+      },
+      {
+        name: "Аустралия",
+        coords: [-25.2744, 133.7751],
+        videoUrl: "https://storage.googleapis.com/kazsign/country/australia.MOV",
+        description: "Ерекше табиғатымен және қалалық өмірімен танымал құрлық мемлекет"
       }
     ];
 
-    // Custom marker icons
+
     const createCustomIcon = (color, icon = 'fa-hands') => {
       return L.divIcon({
         className: 'custom-marker',
@@ -606,7 +758,7 @@
       });
     };
 
-    // Add city markers to map
+
     const cityMarkers = [];
     cities.forEach((city, index) => {
       const colors = ['#ffda00', '#002137', '#ff6b6b'];
@@ -626,7 +778,7 @@
               class="city-button"
             >
               <i class="fas fa-play"></i>
-              Жестовый тілді көру
+              Ым-ишарасы тілді көру
             </button>
           </div>
         </div>
@@ -640,7 +792,7 @@
       cityMarkers.push(marker);
     });
 
-    // Add country markers (not added to map initially)
+
     const countryMarkers = [];
     countries.forEach((country, index) => {
       const colors = ['#002137', '#ff6b6b', '#4CAF50'];
@@ -660,7 +812,7 @@
               class="city-button"
             >
               <i class="fas fa-play"></i>
-              ${country.name} жестовый тілін көру
+              ${country.name} ым-ишарасы тілін көру
             </button>
           </div>
         </div>
@@ -674,11 +826,11 @@
       countryMarkers.push(marker);
     });
 
-    // Map control functions
+
     let activeLayer = 'cities';
     
     window.toggleLayer = function(layerType) {
-      // Update button states
+
       document.querySelectorAll('.control-btn').forEach(btn => {
         btn.classList.remove('active');
       });
@@ -687,16 +839,15 @@
       activeLayer = layerType;
       
       if (layerType === 'cities') {
-        // Show cities, hide countries
+
         cityMarkers.forEach(marker => marker.addTo(map));
         countryMarkers.forEach(marker => map.removeLayer(marker));
         map.setView([48.0196, 66.9237], 5);
       } else if (layerType === 'countries') {
-        // Show countries, hide cities
+
         countryMarkers.forEach(marker => marker.addTo(map));
         cityMarkers.forEach(marker => map.removeLayer(marker));
-        
-        // Fit view to show all countries
+
         const countryGroup = new L.featureGroup(countryMarkers);
         map.fitBounds(countryGroup.getBounds().pad(0.5));
       }
@@ -711,7 +862,7 @@
       }
     };
 
-    // Enhanced modal functionality
+
     const modal = document.getElementById('videoModal');
     const closeBtn = document.querySelector('.close-modal');
     const videoPlayer = document.getElementById('modalVideo');
@@ -725,7 +876,7 @@
       
       modalTitle.textContent = `${name}`;
       videoInfoTitle.textContent = `${name}`;
-      videoInfoDescription.textContent = item.description || `${name} жестовый тілінің ерекшеліктері мен мәдени аспектілері.`;
+      videoInfoDescription.textContent = item.description || `${name} ым-ишара тілінің ерекшеліктері мен мәдени аспектілері.`;
       
       videoPlayer.src = videoUrl;
       videoPlayer.load();
@@ -760,7 +911,7 @@
         closeModal();
       }
     });
-     // Поиск городов
+
     citySearch.addEventListener('input', function(e) {
       const searchTerm = e.target.value.toLowerCase();
       

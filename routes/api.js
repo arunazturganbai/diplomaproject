@@ -44,7 +44,7 @@ router.get('/categories', async (req, res) => {
   }
 });
 
-// GET /api/words/random
+
 router.get('/words/random', async (req, res) => {
   try {
     const count = parseInt(req.query.count) || 5;
@@ -62,7 +62,7 @@ router.get('/words/random', async (req, res) => {
   }
 });
 
-// GET /api/stats
+
 router.get('/stats', async (req, res) => {
   try {
     const stats = {

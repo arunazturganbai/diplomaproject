@@ -9,17 +9,14 @@ router.get('/', async (req, res) => {
     const { search, category, difficulty } = req.query;
     let filter = { isActive: true };
     
-    // Search filter
     if (search) {
       filter.$text = { $search: search };
     }
     
-    // Category filter
     if (category) {
       filter.category = category;
     }
     
-    // Difficulty filter
     if (difficulty) {
       filter.difficulty = difficulty;
     }
@@ -86,7 +83,6 @@ router.get('/categories', async (req, res) => {
   try {
     const categories = await Category.find({ isActive: true });
     
-    // Get word count for each category
     const categoriesWithCount = await Promise.all(
       categories.map(async (category) => {
         const wordCount = await Word.countDocuments({
@@ -108,7 +104,7 @@ router.get('/categories', async (req, res) => {
   }
 });
 
-// GET /category/:id
+// GET /category
 router.get('/category/:id', async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);

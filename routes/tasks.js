@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task'); // Модель для вопросов
 
-// GET /tasks — отдать 10 случайных вопросов
+
 router.get('/', async (req, res) => {
   try {
     const tasks = await Task.aggregate([{ $sample: { size: 10 } }]);
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /tasks/submit — сохранить и проверить ответы
+
 router.post('/submit', async (req, res) => {
   const { answers } = req.body;
   let score = 0;
@@ -24,7 +24,7 @@ router.post('/submit', async (req, res) => {
     }
   }
 
-  // Здесь можно сохранить результат пользователю в базу
+
   res.json({ score });
 });
 

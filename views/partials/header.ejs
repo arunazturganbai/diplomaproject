@@ -4,13 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Language Dictionary</title>
+  <link rel="icon" href="/css/logo.png" type="image/png">
   <link rel="stylesheet" href="/css/style.css">
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const burger = document.getElementById('burgerBtn');
+      const navMenu = document.getElementById('navMenu');
+      burger.addEventListener('click', function() {
+        navMenu.classList.toggle('open');
+      });
+      navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => navMenu.classList.remove('open'));
+      });
+    });
+  </script>
 </head>
 <body>
   <header>
     <nav>
-     <div class="logo"><img src="/css/logo.png" alt="Logo"></div>
-      <ul>
+     <div class="logo"><a href="/"><img src="/css/logo.png" alt="Logo"></a></div>
+     <button class="burger" id="burgerBtn" aria-label="Меню">&#9776;</button>
+      <ul id="navMenu">
         <li><a href="/">Басты бет</a></li>
         <li><a href="/categories">Категориялар</a></li>
         <li><a href="/map">Карта</a></li>
@@ -21,11 +35,11 @@
   <% if (typeof user !== 'undefined' && user) { %>
     <a href="/account" class="username"><%= user.username %></a>
     <form action="/logout" method="POST" class="logout-form">
-      <button type="submit">Logout</button>
+      <button type="submit">Шығу</button>
     </form>
   <% } else { %>
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
+    <a href="/login">Кіру</a>
+    <a href="/register">Тіркелу</a>
   <% } %>
 </div>
     </nav>

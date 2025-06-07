@@ -8,7 +8,6 @@ const Task = require('../models/Task');
 const adminRouter = require('./routes/admin');
 app.use('/admin', adminRouter);
 
-// Admin authentication middleware
 const requireAdmin = (req, res, next) => {
   if (!req.session.user || req.session.user.role !== 'admin') {
     req.flash('error', 'Доступ запрещен');
@@ -17,10 +16,9 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
-// Apply admin middleware to all routes
 router.use(requireAdmin);
 
-// GET /admin - Dashboard
+// GET /админ панель
 router.get('/', requireAdmin, async (req, res) => {
   try {
     const [videos, categories, comments, tasks, stats, recentWords, recentUsers] = await Promise.all([
@@ -50,7 +48,7 @@ router.get('/', requireAdmin, async (req, res) => {
 });
 
 
-// GET /admin/words
+
 router.get('/words', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -80,7 +78,6 @@ router.get('/words', async (req, res) => {
   }
 });
 
-// GET /admin/words/new
 router.get('/words/new', async (req, res) => {
   try {
     const categories = await Category.find({ isActive: true });
@@ -92,7 +89,6 @@ router.get('/words/new', async (req, res) => {
   }
 });
 
-// POST /admin/words
 router.post('/words', async (req, res) => {
   try {
     const { title, description, videoUrl, category, tags, difficulty } = req.body;
@@ -117,7 +113,6 @@ router.post('/words', async (req, res) => {
   }
 });
 
-// GET /admin/words/:id/edit
 router.get('/words/:id/edit', async (req, res) => {
   try {
     const word = await Word.findById(req.params.id);
@@ -136,7 +131,7 @@ router.get('/words/:id/edit', async (req, res) => {
   }
 });
 
-// PUT /admin/words/:id
+
 router.put('/words/:id', async (req, res) => {
   try {
     const { title, description, videoUrl, category, tags, difficulty, isActive } = req.body;
@@ -160,7 +155,7 @@ router.put('/words/:id', async (req, res) => {
   }
 });
 
-// DELETE /admin/words/:id
+
 router.delete('/words/:id', async (req, res) => {
   try {
     await Word.findByIdAndDelete(req.params.id);
@@ -173,7 +168,7 @@ router.delete('/words/:id', async (req, res) => {
   }
 });
 
-// GET /admin/categories
+
 router.get('/categories', async (req, res) => {
   try {
     const categories = await Category.find().sort({ createdAt: -1 });
@@ -185,13 +180,13 @@ router.get('/categories', async (req, res) => {
   }
 });
 
-// GET /admin/categories/new
+
 router.get('/categories/new', (req, res) => {
   res.render('admin/category-form', { category: null });
 });
 
 
-// POST /admin/categories
+
 router.post('/categories', async (req, res) => {
   try {
     const { name, description, color, icon } = req.body;
@@ -213,7 +208,7 @@ router.post('/categories', async (req, res) => {
   }
 });
 
-// GET /admin/categories/:id/edit
+
 router.get('/categories/:id/edit', async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
@@ -229,7 +224,7 @@ router.get('/categories/:id/edit', async (req, res) => {
   }
 });
 
-// PUT /admin/categories/:id
+
 router.put('/categories/:id', async (req, res) => {
   try {
     const { name, description, color, icon, isActive } = req.body;
@@ -251,7 +246,7 @@ router.put('/categories/:id', async (req, res) => {
   }
 });
 
-// DELETE /admin/categories/:id
+
 router.delete('/categories/:id', async (req, res) => {
   try {
     await Category.findByIdAndDelete(req.params.id);
@@ -261,7 +256,7 @@ router.delete('/categories/:id', async (req, res) => {
   }
 });
 
-// GET /admin/users
+
 router.get('/users', async (req, res) => {
   try {
     const users = await User.find()
@@ -275,7 +270,7 @@ router.get('/users', async (req, res) => {
     res.render('admin/users', { users: [] });
   }
 });
-// Update word
+
 router.put('/edit-word/:id', ensureAdmin, async (req, res) => {
   try {
     const { title, description, videoUrl, category } = req.body;
@@ -296,7 +291,7 @@ router.put('/edit-word/:id', ensureAdmin, async (req, res) => {
   }
 });
 
-// Delete word
+
 router.delete('/delete-word/:id', ensureAdmin, async (req, res) => {
   try {
     await SignWord.findByIdAndDelete(req.params.id);

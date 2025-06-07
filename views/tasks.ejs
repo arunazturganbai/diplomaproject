@@ -259,7 +259,7 @@
       }
     }
     
-    /* Animation for correct answer */
+
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.03); }
@@ -270,7 +270,7 @@
       animation: pulse 0.5s ease;
     }
     
-    /* Tooltip for videos */
+ 
     .video-tooltip {
       position: absolute;
       bottom: 10px;
@@ -289,7 +289,6 @@
       opacity: 1;
     }
     
-    /* Floating action button */
     .fab {
       position: fixed;
       bottom: 30px;
@@ -318,8 +317,8 @@
 <body>
 <div class="main-content">
   <div class="quiz-header">
-    <h2>Викторина по жестовому языку</h2>
-    <p>Выберите правильный жест для каждого слова или фразы</p>
+    <h2>Ым тілі викторинасы</h2>
+    <p>Әр сөзге дұрыс ым-ишараны таңдаңыз</p>
   </div>
   
   <div class="progress-container">
@@ -329,78 +328,247 @@
   <form id="quizForm">
     <div class="question-container">
       <div class="question-card" data-correct="0" data-question="1">
-        <h3>1. Какой жест обозначает «Африка»?</h3>
+        <h3>1. “Африка” сөзінің ым-ишарасы қандай?</h3>
         <div class="options-grid">
           <label class="video-option">
             <input type="radio" name="question1" value="0" hidden>
-            <video src="https://storage.googleapis.com/kazsign/country/africa.mp4" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <video src="https://storage.googleapis.com/kazsign/country/africa.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
           
           <label class="video-option">
             <input type="radio" name="question1" value="1" hidden>
             <video src="https://storage.googleapis.com/kazsign/country/argentina.MOV" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
           
           <label class="video-option">
             <input type="radio" name="question1" value="2" hidden>
             <video src="https://storage.googleapis.com/kazsign/country/austria.MOV" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
         </div>
       </div>
       
       <div class="question-card" data-correct="1" data-question="2">
-        <h3>2. Какой жест обозначает «Америка»?</h3>
+        <h3>2. "С" әріпінің ым-ишарасы қандай?</h3>
         <div class="options-grid">
           <label class="video-option">
             <input type="radio" name="question2" value="0" hidden>
-            <video src="https://storage.googleapis.com/kazsign/country/africa.mp4" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <video src="https://storage.googleapis.com/kazsign/numbers/1000.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
           
           <label class="video-option">
             <input type="radio" name="question2" value="1" hidden>
-            <video src="https://storage.googleapis.com/kazsign/country/argentina.MOV" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <video src="https://storage.googleapis.com/kazsign/alphabet/%D1%81.mov" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
           
           <label class="video-option">
             <input type="radio" name="question2" value="2" hidden>
-            <video src="https://storage.googleapis.com/kazsign/country/austria.MOV" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <video src="https://storage.googleapis.com/kazsign/madeniet/%D0%BC%D3%99%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5%D1%82.mov" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
         </div>
       </div>
       
       <div class="question-card" data-correct="2" data-question="3">
-        <h3>3. Какой жест обозначает «Сингапур»?</h3>
+        <h3>3. “Қазақстан” сөзінің ым-ишарасы қандай?</h3>
         <div class="options-grid">
           <label class="video-option">
             <input type="radio" name="question3" value="0" hidden>
-            <video src="https://storage.googleapis.com/kazsign/country/africa.mp4" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <video src="https://storage.googleapis.com/kazsign/city/%D0%9F%D0%B5%D1%82%D1%80%D0%BE%D0%BF%D0%B0%D0%B2%D0%BB%D0%BE%D0%B2%D1%81%D0%BA.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
           
           <label class="video-option">
             <input type="radio" name="question3" value="1" hidden>
             <video src="https://storage.googleapis.com/kazsign/country/argentina.MOV" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
           
           <label class="video-option">
             <input type="radio" name="question3" value="2" hidden>
-            <video src="https://storage.googleapis.com/kazsign/country/austria.MOV" autoplay muted playsinline preload="metadata" loop></video>
-            <span class="video-tooltip">Нажмите для выбора</span>
+            <video src="https://storage.googleapis.com/kazsign/country/kazakhstan.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
           </label>
         </div>
       </div>
     </div>
+
+    <div class="question-card" data-correct="2" data-question="4">
+        <h3>4. “Кітапхана” сөзінің ым-ишарасы қандай?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question4" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/city/%D0%A2%D0%B0%D1%88%D0%BA%D0%B5%D0%BD%D1%82.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question4" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/alphabet/%D1%84.mov" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question4" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/madeniet/%D0%BA%D1%96%D1%82%D0%B0%D0%BF%D1%85%D0%B0%D0%BD%D0%B0.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-card" data-correct="1" data-question="5">
+        <h3>5. “Тыңдау” сөзінің ым-ишарасы қандай?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question5" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/alphabet/%D0%B6.mov" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question5" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/glagoly/tyndau.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question5" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/professia/%D0%B1%D0%B0%D1%81%D1%88%D1%8B.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-card" data-correct="0" data-question="6">
+        <h3>6. “Қытай” сөзінің ым-ишарасы қандай?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question6" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/country/china.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question6" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/professia/%D0%B5%D1%82%D0%B8%D0%BA%D1%88%D0%B8.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question6" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/sport/%D0%BA%D2%AF%D1%80%D0%B5%D1%81.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-card" data-correct="1" data-question="7">
+        <h3>7. "В" әріпінің ым-ишарасы қандай?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question7" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/sport/%D1%84%D1%83%D1%82%D0%B1%D0%BE%D0%BB.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question7" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/alphabet/%D0%B2.mov" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question7" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/location/audan.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-card" data-correct="2" data-question="8">
+        <h3>8. “Әке” сөзінің ым-ишарасы қандай?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question8" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/location/city.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question8" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/question/%D0%BA%D0%B8%D0%BC.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question8" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/family/%D0%B0%D0%BA%D0%B5.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-card" data-correct="1" data-question="9">
+        <h3>9. “Шахмат” сөзінің ым-ишарасы қандай?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question9" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/question/%D0%BD%D0%B5%D0%B3%D0%B5.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question9" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/sport/%D1%88%D0%B0%D1%85%D0%BC%D0%B0%D1%82.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question9" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/glagoly/perepisat.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-card" data-correct="0" data-question="10">
+        <h3>10. “Қайда” сөзінің ым-ишарасы қандай?</h3>
+        <div class="options-grid">
+          <label class="video-option">
+            <input type="radio" name="question" value="0" hidden>
+            <video src="https://storage.googleapis.com/kazsign/question/%D0%BA%D0%B0%D0%B9%D0%B4%D0%B0.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question10" value="1" hidden>
+            <video src="https://storage.googleapis.com/kazsign/glagoly/ne%20dam.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+          
+          <label class="video-option">
+            <input type="radio" name="question10" value="2" hidden>
+            <video src="https://storage.googleapis.com/kazsign/family/%D0%B0%D1%82%D0%B0.MOV" autoplay muted playsinline preload="metadata" loop></video>
+            <span class="video-tooltip">Таңдау үшін басыңыз</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
     
     <div class="controls">
       <button type="button" class="button button-secondary" id="prevBtn" disabled>
-        <span class="icon">←</span> Назад
+        <span class="icon">←</span> Артқа
       </button>
       
       <div>
@@ -408,23 +576,23 @@
       </div>
       
       <button type="button" class="button button-primary" id="nextBtn">
-        Далее <span class="icon">→</span>
+        Алға <span class="icon">→</span>
       </button>
       
       <button type="submit" class="button button-primary" id="submitBtn" style="display: none;">
-        Завершить тест
+        Тестті аяқтау
       </button>
     </div>
   </form>
   
   <div class="results-container" id="resultsContainer">
-    <h3>Результаты теста</h3>
+    <h3>Тест нәтежиелері</h3>
     <div class="score-display">
-      <span id="score">0</span>/<span id="total">3</span>
+      <span id="score">0</span>/<span id="total">10</span>
     </div>
     <div class="feedback" id="feedback"></div>
     <button type="button" class="button button-secondary" id="restartBtn" style="margin-top: 1.5rem;">
-      Пройти тест снова
+      Тестті қайта бастау
     </button>
   </div>
 </div>
@@ -435,7 +603,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // DOM elements
+
     const quizForm = document.getElementById('quizForm');
     const questionCards = document.querySelectorAll('.question-card');
     const prevBtn = document.getElementById('prevBtn');
@@ -451,12 +619,12 @@
     const feedbackDisplay = document.getElementById('feedback');
     const helpFab = document.getElementById('helpFab');
     
-    // Quiz state
+
     let currentQuestionIndex = 0;
     const totalQuestions = questionCards.length;
     let answers = new Array(totalQuestions).fill(null);
     
-    // Initialize
+
     totalQuestionsDisplay.textContent = totalQuestions;
     totalDisplay.textContent = totalQuestions;
     updateProgress();
@@ -481,23 +649,23 @@
       resetQuiz();
     });
     
-    // Video option selection - FIXED CLICK HANDLING
+
     document.querySelectorAll('.video-option').forEach(option => {
       option.addEventListener('click', function() {
         const input = this.querySelector('input');
         if (!input) return;
         
-        // Unselect all options in this question
+
         const questionCard = this.closest('.question-card');
         questionCard.querySelectorAll('.video-option').forEach(opt => {
           opt.classList.remove('selected');
         });
         
-        // Select current option
+
         this.classList.add('selected');
         input.checked = true;
         
-        // Update answer in state
+
         const questionIndex = parseInt(questionCard.dataset.question) - 1;
         answers[questionIndex] = parseInt(input.value);
         
@@ -505,18 +673,18 @@
       });
     });
     
-    // Form submission
+  
     quizForm.addEventListener('submit', function(e) {
       e.preventDefault();
       showResults();
     });
     
-    // Help button
+
     helpFab.addEventListener('click', function() {
-      alert('Выберите правильный жест для каждого вопроса. Можно нажимать на видео для выбора. Используйте кнопки "Назад" и "Далее" для навигации.');
+      alert('Әр сұраққа дұрыс ым-ишараны таңдаңыз. Таңдау үшін видеоларға басуға болады. Навигация үшін «Артқа» және «Алға» батырмаларын пайдаланыңыз.');
     });
     
-    // Functions
+
     function showQuestion(index) {
       questionCards.forEach((card, i) => {
         card.style.display = i === index ? 'block' : 'none';
@@ -524,12 +692,12 @@
       
       currentQuestionDisplay.textContent = index + 1;
       
-      // Update navigation buttons
+
       prevBtn.disabled = index === 0;
       nextBtn.style.display = index === totalQuestions - 1 ? 'none' : 'inline-flex';
       submitBtn.style.display = index === totalQuestions - 1 ? 'inline-flex' : 'none';
       
-      // Restore selected answer if exists
+
       if (answers[index] !== null) {
         const selectedInput = questionCards[index].querySelector(`input[value="${answers[index]}"]`);
         if (selectedInput) {
@@ -566,7 +734,7 @@
         const correctAnswer = parseInt(card.dataset.correct);
         const selectedAnswer = answers[index];
         
-        // Mark correct and incorrect answers
+
         const options = card.querySelectorAll('.video-option');
         options.forEach((option, i) => {
           if (i === correctAnswer) {
@@ -581,11 +749,11 @@
         }
       });
       
-      // Calculate score
+
       const score = Math.round((correctCount / totalQuestions) * 100);
       scoreDisplay.textContent = correctCount;
       
-      // Show feedback
+
       let feedback = '';
       if (score === 100) {
         feedback = 'Отличный результат! Вы прекрасно знаете жестовый язык!';
@@ -599,20 +767,20 @@
       
       feedbackDisplay.textContent = feedback;
       
-      // Show results
+     
       resultsContainer.style.display = 'block';
       quizForm.style.display = 'none';
       
-      // Scroll to results
+ 
       resultsContainer.scrollIntoView({ behavior: 'smooth' });
     }
     
     function resetQuiz() {
-      // Reset state
+
       currentQuestionIndex = 0;
       answers = new Array(totalQuestions).fill(null);
       
-      // Reset UI
+
       questionCards.forEach(card => {
         const options = card.querySelectorAll('.video-option');
         options.forEach(option => {
@@ -627,11 +795,11 @@
       showQuestion(currentQuestionIndex);
       updateProgress();
       
-      // Scroll to top
+ 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     
-    // Play videos on hover
+
     document.querySelectorAll('.video-option').forEach(option => {
       const video = option.querySelector('video');
       
